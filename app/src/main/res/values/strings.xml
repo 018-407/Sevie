@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="authorization_device_code_hint">Authorization Code</string>
+    <string name="authorization_button">Authorize</string>
+
+    <string name="login_username_hint">Username</string>
+    <string name="login_password_hint">Password</string>
+    <string name="login_button">Login</string>
+</resources>

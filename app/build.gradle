@@ -1,0 +1,53 @@
+apply plugin: 'com.android.application'
+
+android {
+    compileSdkVersion 26
+    buildToolsVersion "26.0.1"
+    defaultConfig {
+        applicationId 'com.mobileoptima.tarkieattendance'
+        minSdkVersion 16
+        targetSdkVersion 26
+        versionCode 1
+        versionName "1.0.0"
+        multiDexEnabled false
+        renderscriptTargetApi 20
+        renderscriptSupportModeEnabled true
+    }
+    buildTypes {
+        release {
+            minifyEnabled true
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            applicationVariants.all { variant ->
+                variant.outputs.each { output ->
+                    def text = output.outputFile.name;
+                    def name = text.substring(4, text.length() - 12).capitalize();
+                    def versionName = 'v' + variant.versionName;
+                    def versionCode = 'vc' + variant.versionCode;
+                    def date = new Date().format('yyyy-MM-dd');
+                    def label = name + '_' + versionName + '_' + versionCode + '_' + date + '.apk';
+                    output.outputFile = new File(output.outputFile.parent, label);
+                }
+            }
+        }
+    }
+    productFlavors {
+        sevie {
+            resValue 'string', 'app_name', 'Sevie'
+        }
+        timsiev2 {
+            applicationIdSuffix '.timsiev2'
+            resValue 'string', 'app_name', 'Timsie'
+        }
+    }
+}
+
+dependencies {
+    compile fileTree(include: ['*.jar'], dir: 'libs')
+    compile project(path: ':app:modules:library')
+//    compile name: 'library-1.0.0', ext: 'aar'
+    compile 'com.google.android.gms:play-services-location:11.2.0'
+    compile 'com.google.firebase:firebase-messaging:11.2.0'
+    compile 'com.mixpanel.android:mixpanel-android:4.9.2'
+}
+
+apply plugin: 'com.google.gms.google-services'

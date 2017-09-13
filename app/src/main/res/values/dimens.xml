@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="et_padding">@dimen/eight</dimen>
+    <dimen name="et_size">@dimen/eighteen</dimen>
+    <dimen name="et_radius">@dimen/five</dimen>
+    <dimen name="et_stroke">@dimen/one</dimen>
+
+    <dimen name="btn_padding">@dimen/eight</dimen>
+    <dimen name="btn_size">@dimen/eighteen</dimen>
+    <dimen name="btn_radius">@dimen/five</dimen>
+    <dimen name="btn_stroke">@dimen/one</dimen>
+
+    <dimen name="pb_dimen">@dimen/seventy_six</dimen>
+    <dimen name="pb_inner_radius">@dimen/thirty_six</dimen><!-- ((pb_dimen / 2) - pb_thickness) -->
+    <dimen name="pb_thickness">@dimen/two</dimen>
+
+    <dimen name="divider">@dimen/one</dimen>
+</resources>

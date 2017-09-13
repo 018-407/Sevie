@@ -1,0 +1,206 @@
+<android.support.v4.widget.DrawerLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/dlMain"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:clickable="true"
+    tools:context="com.mobileoptima.tarkieattendance.MainActivity">
+    <!--tools:openDrawer="start"-->
+
+    <RelativeLayout
+        android:id="@+id/rlMain"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/white">
+
+        <RelativeLayout
+            android:id="@+id/rlAppBarMain"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/fifty_six"
+            android:background="@color/theme_pri"
+            android:orientation="horizontal">
+
+            <LinearLayout
+                android:id="@+id/llMenuAppBarMain"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:background="@drawable/state_rect_black_trans_thirty"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="@dimen/fifty_six"
+                    android:layout_height="@dimen/fifty_six"
+                    android:padding="@dimen/twenty"
+                    android:src="@drawable/ic_menu"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginEnd="@dimen/sixteen"
+                    android:layout_marginRight="@dimen/sixteen"
+                    android:text="Menu"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/sixteen"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:orientation="horizontal"
+                android:visibility="gone">
+
+                <ImageView
+                    android:id="@+id/ivNotifAppBarMain"
+                    android:layout_width="@dimen/fifty_six"
+                    android:layout_height="@dimen/fifty_six"
+                    android:padding="@dimen/sixteen"
+                    android:src="@drawable/ic_notif"/>
+
+                <ImageView
+                    android:id="@+id/ivSyncAppBarMain"
+                    android:layout_width="@dimen/fifty_six"
+                    android:layout_height="@dimen/fifty_six"
+                    android:padding="@dimen/sixteen"
+                    android:src="@drawable/ic_notif"/>
+
+                <ImageView
+                    android:id="@+id/ivSearchAppBarMain"
+                    android:layout_width="@dimen/fifty_six"
+                    android:layout_height="@dimen/fifty_six"
+                    android:padding="@dimen/sixteen"
+                    android:src="@drawable/ic_notif"/>
+
+                <ImageView
+                    android:id="@+id/ivSelectAppBarMain"
+                    android:layout_width="@dimen/fifty_six"
+                    android:layout_height="@dimen/fifty_six"
+                    android:padding="@dimen/sixteen"
+                    android:src="@drawable/ic_notif"/>
+
+                <LinearLayout
+                    android:id="@+id/llDateAppBarMain"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginLeft="@dimen/sixteen"
+                        android:layout_marginStart="@dimen/sixteen"
+                        android:text="Aug 29, 2017"
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/sixteen"/>
+
+                    <ImageView
+                        android:layout_width="@dimen/fifty_six"
+                        android:layout_height="@dimen/fifty_six"
+                        android:padding="@dimen/sixteen"
+                        android:src="@drawable/ic_notif"/>
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+        </RelativeLayout>
+
+        <android.support.v4.view.ViewPager
+            android:id="@+id/vpMain"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_above="@+id/stMain"
+            android:layout_below="@+id/rlAppBarMain"/>
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/divider"
+            android:layout_below="@+id/rlAppBarMain"
+            android:background="@color/black_trans_ten"/>
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/divider"
+            android:layout_above="@+id/stMain"
+            android:background="@color/black_trans_ten"/>
+
+        <com.mobileoptima.widgets.ModulesSlidingTab
+            android:id="@+id/stMain"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/sixty_four"
+            android:layout_alignParentBottom="true"
+            android:background="@color/theme_pri"/>
+
+    </RelativeLayout>
+
+    <ScrollView
+        android:layout_width="@dimen/two_hundred_seventy"
+        android:layout_height="match_parent"
+        android:layout_gravity="start"
+        android:background="@color/white"
+        android:scrollbarSize="@dimen/three"
+        android:scrollbarThumbVertical="@color/black_trans_thirty">
+
+        <LinearLayout
+            android:id="@+id/llMenuItemsDrawerMain"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/one_hundred_fifty"
+                android:background="@color/theme_pri"
+                android:gravity="bottom"
+                android:orientation="vertical"
+                android:padding="@dimen/sixteen">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <ImageView
+                        android:id="@+id/ivEmployeePhotoHeaderDrawerMain"
+                        android:layout_width="@dimen/fifty_six"
+                        android:layout_height="@dimen/fifty_six"
+                        android:adjustViewBounds="true"
+                        android:scaleType="centerInside"/>
+
+                    <ImageView
+                        android:id="@+id/ivCompanyLogoHeaderDrawerMain"
+                        android:layout_width="@dimen/one_hundred_twenty_five"
+                        android:layout_height="@dimen/fifty_six"
+                        android:layout_alignParentEnd="true"
+                        android:layout_alignParentRight="true"
+                        android:adjustViewBounds="true"
+                        android:background="@drawable/bg_rect_white_rad_five"
+                        android:scaleType="centerInside"/>
+
+                </RelativeLayout>
+
+                <TextView
+                    android:id="@+id/tvEmployeeNameHeaderDrawerMain"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/sixteen"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/sixteen"/>
+
+                <TextView
+                    android:id="@+id/tvEmployeeNumberHeaderDrawerMain"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/twelve"/>
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </ScrollView>
+
+</android.support.v4.widget.DrawerLayout>

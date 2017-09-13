@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/black_trans_sixty"
+    android:clickable="true"
+    android:padding="@dimen/sixteen">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:background="@drawable/bg_rect_white_rad_ten"
+        android:orientation="vertical"
+        android:padding="@dimen/sixteen">
+
+        <TextView
+            android:id="@+id/tvTitleLoadingDialog"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginBottom="@dimen/twelve"
+            android:text="Loading..."
+            android:textColor="@color/theme_pri"
+            android:textSize="@dimen/eighteen"/>
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginBottom="@dimen/twelve">
+
+            <ProgressBar
+                android:id="@+id/pbLoadingDialog"
+                style="?android:attr/progressBarStyleHorizontal"
+                android:layout_width="@dimen/pb_dimen"
+                android:layout_height="@dimen/pb_dimen"
+                android:background="@drawable/pb_background"
+                android:indeterminate="false"
+                android:max="100"
+                android:progress="0"
+                android:progressDrawable="@drawable/pb_progress"/>
+
+            <TextView
+                android:id="@+id/tvProgressLoadingDialog"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:text="0%"
+                android:textColor="@color/theme_pri"
+                android:textSize="@dimen/sixteen"/>
+
+        </RelativeLayout>
+
+        <TextView
+            android:id="@+id/tvCompletionLoadingDialog"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="0/100"
+            android:textColor="@color/text_pri"
+            android:textSize="@dimen/fourteen"/>
+
+    </LinearLayout>
+
+</RelativeLayout>

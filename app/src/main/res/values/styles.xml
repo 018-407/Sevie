@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:tools="http://schemas.android.com/tools">
+
+    <style name="AppTheme" parent="Theme.AppCompat.NoActionBar">
+        <item name="android:colorPrimary" tools:targetApi="lollipop">@color/theme_pri</item>
+        <item name="android:colorPrimaryDark" tools:targetApi="lollipop">@color/theme_pri_dark
+        </item>
+    </style>
+</resources>
