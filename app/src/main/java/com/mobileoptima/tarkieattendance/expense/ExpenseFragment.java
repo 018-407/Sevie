@@ -36,26 +36,6 @@ public class ExpenseFragment extends Fragment {
 		vpTabs.add("Expense Items");
 		vpFragments.add(new ExpenseReportsFragment());
 		vpTabs.add("Expense Reports");
-		vpFragments.add(new ExpenseItemsFragment());
-		vpTabs.add("Expense Items");
-		vpFragments.add(new ExpenseReportsFragment());
-		vpTabs.add("Expense Reports");
-//		vpFragments.add(new ExpenseItemsFragment());
-//		vpTabs.add("Expense Items");
-//		vpFragments.add(new ExpenseReportsFragment());
-//		vpTabs.add("Expense Reports");
-//		vpFragments.add(new ExpenseItemsFragment());
-//		vpTabs.add("Expense Items");
-//		vpFragments.add(new ExpenseReportsFragment());
-//		vpTabs.add("Expense Reports");
-//		vpFragments.add(new ExpenseItemsFragment());
-//		vpTabs.add("Expense Items");
-//		vpFragments.add(new ExpenseReportsFragment());
-//		vpTabs.add("Expense Reports");
-//		vpFragments.add(new ExpenseItemsFragment());
-//		vpTabs.add("Expense Items");
-//		vpFragments.add(new ExpenseReportsFragment());
-//		vpTabs.add("Expense Reports");
 		vpAdapter = new ViewPagerAdapter(manager, vpFragments, vpTabs);
 	}
 
@@ -65,12 +45,12 @@ public class ExpenseFragment extends Fragment {
 		View view = inflater.inflate(R.layout.expense_layout, container, false);
 		vpExpense = view.findViewById(R.id.vpExpense);
 		stExpense = view.findViewById(R.id.stExpense);
-//		vpExpense.setAdapter(vpAdapter);
-//		stExpense.setViewPager(vpExpense);
-//		stExpense.setMaxScrollItems(1);
-//		vpAdapter.notifyDataSetChanged();
-//		vpExpense.invalidate();
-//		stExpense.init();
+		vpExpense.setAdapter(vpAdapter);
+		stExpense.setViewPager(vpExpense);
+		stExpense.setMaxScrollItems(2);
+		vpAdapter.notifyDataSetChanged();
+		vpExpense.invalidate();
+		stExpense.init();
 		return view;
 	}
 }

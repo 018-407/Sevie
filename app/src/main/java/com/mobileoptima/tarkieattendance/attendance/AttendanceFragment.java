@@ -5,7 +5,6 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.view.ViewPager;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -29,7 +28,6 @@ public class AttendanceFragment extends Fragment {
 	@Override
 	public void onCreate(@Nullable Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		Log.e("paul", "onCreate");
 		main = (MainActivity) getActivity();
 		manager = main.getSupportFragmentManager();
 		vpFragments = new ArrayList<>();
@@ -46,22 +44,15 @@ public class AttendanceFragment extends Fragment {
 	@Nullable
 	@Override
 	public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-		Log.e("paul", "onCreateView");
 		View view = inflater.inflate(R.layout.attendance_layout, container, false);
 		vpAttendance = view.findViewById(R.id.vpAttendance);
 		stAttendance = view.findViewById(R.id.stAttendance);
 		vpAttendance.setAdapter(vpAdapter);
 		stAttendance.setViewPager(vpAttendance);
-		stAttendance.setMaxScrollItems(1);
+		stAttendance.setMaxScrollItems(2);
 		vpAdapter.notifyDataSetChanged();
 		vpAttendance.invalidate();
-		return view;
-	}
-
-	@Override
-	public void onResume() {
-		super.onResume();
-		Log.e("paul", "onResume");
 		stAttendance.init();
+		return view;
 	}
 }

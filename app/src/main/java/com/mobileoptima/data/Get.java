@@ -1,6 +1,7 @@
 package com.mobileoptima.data;
 
 import com.android.library.Sqlite.SQLiteAdapter;
+import com.mobileoptima.constants.Modules;
 import com.mobileoptima.constants.Settings;
 import com.mobileoptima.constants.Table;
 import com.mobileoptima.models.Company;
@@ -82,6 +83,10 @@ public class Get {
 	public static String conventionName(SQLiteAdapter db, String conventionID) {
 		String name = null;
 		return name;
+	}
+
+	public static boolean isModuleEnabled(SQLiteAdapter db, String moduleID) {
+		return moduleID.equals(Modules.ATTENDANCE.getID()) || db.getInt("SELECT isEnabled FROM " + Table.MODULES.getName() + " WHERE name = '" + moduleID + "'") == 1;
 	}
 
 	public static String timeInID(SQLiteAdapter db) {

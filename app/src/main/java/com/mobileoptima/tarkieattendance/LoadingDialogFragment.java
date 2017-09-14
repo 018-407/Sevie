@@ -72,10 +72,15 @@ public class LoadingDialogFragment extends Fragment implements OnBackPressedCall
 							}
 							break;
 						case UPDATE_MASTER_FILE:
-							max = 2;
+							max = 3;
 							result = Rx.company(db, LoadingDialogFragment.this);
 							Thread.sleep(250);
 							handler.sendMessage(handler.obtainMessage());
+							if(result) {
+								Rx.company(db, LoadingDialogFragment.this);
+								Thread.sleep(250);
+								handler.sendMessage(handler.obtainMessage());
+							}
 							if(result) {
 								Rx.company(db, LoadingDialogFragment.this);
 								Thread.sleep(250);

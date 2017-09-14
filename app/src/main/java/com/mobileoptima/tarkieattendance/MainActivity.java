@@ -33,11 +33,6 @@ import com.mobileoptima.data.Save;
 import com.mobileoptima.interfaces.Callback.OnBackPressedCallback;
 import com.mobileoptima.interfaces.Callback.OnInitializeCallback;
 import com.mobileoptima.interfaces.Callback.OnRefreshCallback;
-import com.mobileoptima.tarkieattendance.attendance.AttendanceFragment;
-import com.mobileoptima.tarkieattendance.expense.ExpenseFragment;
-import com.mobileoptima.tarkieattendance.forms.FormsFragment;
-import com.mobileoptima.tarkieattendance.inventory.InventoryFragment;
-import com.mobileoptima.tarkieattendance.visits.VisitsFragment;
 import com.mobileoptima.widgets.ModulesSlidingTab;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
@@ -53,7 +48,6 @@ public class MainActivity extends AppCompatActivity implements OnRefreshCallback
 	private FragmentManager manager;
 	private ImageLoader imageLoader;
 	private ImageView ivEmployeePhotoHeaderDrawerMain, ivCompanyLogoHeaderDrawerMain;
-	private LayoutInflater inflater;
 	private LinearLayout llMenuItemsDrawerMain;
 	private OnBackPressedCallback backPressedCallback;
 	private Resources res;
@@ -72,7 +66,6 @@ public class MainActivity extends AppCompatActivity implements OnRefreshCallback
 		manager = getSupportFragmentManager();
 		manager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
 		window = getWindow();
-		inflater = getLayoutInflater();
 		res = getResources();
 		dlMain = findViewById(R.id.dlMain);
 		ivEmployeePhotoHeaderDrawerMain = findViewById(R.id.ivEmployeePhotoHeaderDrawerMain);
@@ -83,6 +76,8 @@ public class MainActivity extends AppCompatActivity implements OnRefreshCallback
 		LinearLayout llMenuAppBarMain = findViewById(R.id.llMenuAppBarMain);
 		vpMain = findViewById(R.id.vpMain);
 		stMain = findViewById(R.id.stMain);
+		vpFragments = new ArrayList<>();
+		vpTabs = new ArrayList<>();
 		dlMain.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
 		llMenuAppBarMain.setOnClickListener(this);
 		RoundedBitmapDrawable roundUserPlaceholder = RoundedBitmapDrawableFactory.create(res, BitmapFactory.decodeResource(res, R.drawable.ic_user_placeholder));
@@ -168,28 +163,30 @@ public class MainActivity extends AppCompatActivity implements OnRefreshCallback
 			Menu.TIME_IN_OUT.setName(Convention.TIME_IN.getName());
 		}
 		for(Menu menu : Menu.values()) {
-			updateMenuItem(inflater, llMenuItemsDrawerMain, menu);
+			updateMenuItem(llMenuItemsDrawerMain, menu);
 		}
-		vpFragments = new ArrayList<>();
-		vpTabs = new ArrayList<>();
+		vpFragments.clear();
+		vpTabs.clear();
 		vpFragments.add(new HomeFragment());
 		vpTabs.add("Home");
-		vpFragments.add(new VisitsFragment());
-		vpTabs.add(Modules.VISITS.getName());
-		vpFragments.add(new ExpenseFragment());
-		vpTabs.add(Modules.EXPENSE.getName());
-		vpFragments.add(new InventoryFragment());
-		vpTabs.add(Modules.INVENTORY.getName());
-		vpFragments.add(new FormsFragment());
-		vpTabs.add(Modules.FORMS.getName());
-		vpFragments.add(new AttendanceFragment());
-		vpTabs.add("History");
-		vpAdapter = new ViewPagerAdapter(manager, vpFragments, vpTabs);
-		vpMain.setOffscreenPageLimit(6);
-		vpMain.setAdapter(vpAdapter);
-		stMain.setViewPager(vpMain);
-		stMain.setMaxScrollItems(6);
-		stMain.init();
+		for(Modules module : Modules.values()) {
+			if(Get.isModuleEnabled(db, module.getID())) {
+				vpFragments.add(module.getFragment());
+				vpTabs.add(module.getName());
+			}
+		}
+		if(vpAdapter == null) {
+			vpAdapter = new ViewPagerAdapter(manager, vpFragments, vpTabs);
+			vpMain.setOffscreenPageLimit(6);
+			vpMain.setAdapter(vpAdapter);
+			stMain.setViewPager(vpMain);
+			stMain.setMaxScrollItems(6);
+		}
+		else {
+			vpAdapter.notifyDataSetChanged();
+			vpMain.invalidate();
+			stMain.init();
+		}
 	}
 
 	@Override
@@ -283,14 +280,11 @@ public class MainActivity extends AppCompatActivity implements OnRefreshCallback
 		this.backPressedCallback = backPressedCallback;
 	}
 
-	public void updateMain() {
-	}
-
-	public void updateMenuItem(LayoutInflater inflater, LinearLayout container, Menu menu) {
+	public void updateMenuItem(LinearLayout container, Menu menu) {
 		int index = menu.ordinal() + 1;
 		View menuItem = container.getChildAt(index);
 		if(menuItem == null) {
-			menuItem = inflater.inflate(R.layout.menu_list_row, null, false);
+			menuItem = LayoutInflater.from(this).inflate(R.layout.menu_list_row, container, false);
 			menuItem.setId(index);
 			container.addView(menuItem, index);
 		}
@@ -298,5 +292,9 @@ public class MainActivity extends AppCompatActivity implements OnRefreshCallback
 		((ImageView) menuItem.findViewById(R.id.ivIconMenu)).setImageResource(menu.getIcon());
 		((TextView) menuItem.findViewById(R.id.tvTextMenu)).setText(menu.getName());
 		menuItem.setOnClickListener(this);
+	}
+
+	public void updateModules() {
+
 	}
 }

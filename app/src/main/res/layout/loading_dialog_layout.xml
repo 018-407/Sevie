@@ -40,7 +40,8 @@
                 android:indeterminate="false"
                 android:max="100"
                 android:progress="0"
-                android:progressDrawable="@drawable/pb_progress"/>
+                android:progressDrawable="@drawable/pb_progress"
+                android:rotation="270"/>
 
             <TextView
                 android:id="@+id/tvProgressLoadingDialog"

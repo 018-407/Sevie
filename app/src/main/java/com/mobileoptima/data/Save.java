@@ -81,4 +81,17 @@ public class Save {
 		conditions.add(new Condition(new FieldValue("ID", employee.ID)));
 		return db.update(table, fieldValues, conditions);
 	}
+
+	public static boolean moduleEnabled(SQLiteAdapter db, String module) {
+		String table = Table.MODULES.getName();
+		ArrayList<FieldValue> fieldValues = new ArrayList<>();
+		fieldValues.add(new FieldValue("name", module));
+		fieldValues.add(new FieldValue("isEnabled", true));
+		if(db.getCount("SELECT ID FROM " + table + " WHERE name = '" + module + "'") == 0) {
+			return db.insert(table, fieldValues) > 0;
+		}
+		ArrayList<Condition> conditions = new ArrayList<>();
+		conditions.add(new Condition(new FieldValue("name", module)));
+		return db.update(table, fieldValues, conditions);
+	}
 }

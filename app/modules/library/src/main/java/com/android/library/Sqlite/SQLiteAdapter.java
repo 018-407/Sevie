@@ -80,14 +80,17 @@ public class SQLiteAdapter {
 		StringBuilder fields = new StringBuilder();
 		StringBuilder values = new StringBuilder();
 		for(FieldValue obj : fieldValues) {
-			if(fields.length() > 0) {
-				fields.append(", ");
+			String value = obj.value;
+			if(value != null && !value.isEmpty()) {
+				if(fields.length() > 0) {
+					fields.append(", ");
+				}
+				fields.append(obj.field);
+				if(values.length() > 0) {
+					values.append(", ");
+				}
+				values.append("'" + value + "'");
 			}
-			fields.append(obj.field);
-			if(values.length() > 0) {
-				values.append(", ");
-			}
-			values.append("'" + obj.value + "'");
 		}
 		getWritableDatabase();
 		SQLiteStatement statement = db.compileStatement("INSERT INTO " + table + "(" + fields.toString() + ") VALUES(" + values.toString() + ")");
@@ -143,10 +146,13 @@ public class SQLiteAdapter {
 	private String fieldValuesToUpdateString(ArrayList<FieldValue> list) {
 		StringBuilder fieldValue = new StringBuilder();
 		for(FieldValue obj : list) {
-			if(fieldValue.length() != 0) {
-				fieldValue.append(", ");
+			String value = obj.value;
+			if(value != null && !value.isEmpty()) {
+				if(fieldValue.length() != 0) {
+					fieldValue.append(", ");
+				}
+				fieldValue.append(obj.field + " " + Operator.EQUALS.getValue() + " '" + value + "'");
 			}
-			fieldValue.append(obj.field + " " + Operator.EQUALS.getValue() + " '" + obj.value + "'");
 		}
 		return fieldValue.toString();
 	}

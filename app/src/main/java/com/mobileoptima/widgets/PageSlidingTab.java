@@ -4,7 +4,6 @@ import android.content.Context;
 import android.support.v4.view.ViewPager;
 import android.support.v4.view.ViewPager.OnPageChangeListener;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.HorizontalScrollView;
@@ -17,7 +16,6 @@ import com.mobileoptima.tarkieattendance.R;
 
 public class PageSlidingTab extends HorizontalScrollView {
 	private Context context;
-	private LinearLayout container;
 	private ViewPager viewPager;
 	private int maxScrollItems = 2;
 
@@ -44,73 +42,32 @@ public class PageSlidingTab extends HorizontalScrollView {
 	public void setMaxScrollItems(int maxScrollItems) {
 		if(maxScrollItems <= 2) {
 			this.maxScrollItems = maxScrollItems;
+			init();
 		}
 	}
 
 	public void init() {
+		setFillViewport(true);
+		setHorizontalScrollBarEnabled(false);
+		if(getChildCount() != 0) {
+			removeAllViews();
+		}
+		final LinearLayout container = new LinearLayout(context);
+		container.setLayoutParams(new LinearLayout.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
+		container.setOrientation(LinearLayout.HORIZONTAL);
 		if(viewPager != null) {
 			ViewPagerAdapter adapter = (ViewPagerAdapter) viewPager.getAdapter();
 			if(adapter != null && adapter.getCount() != 0) {
-				setFillViewport(true);
-				setWillNotDraw(false);
-				setHorizontalScrollBarEnabled(false);
-				if(container == null) {
-					removeAllViews();
-					container = new LinearLayout(context);
-					container.setLayoutParams(new LinearLayout.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
-					container.setOrientation(LinearLayout.HORIZONTAL);
-					addView(container);
-					viewPager.addOnPageChangeListener(new OnPageChangeListener() {
-						@Override
-						public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-							if(container.getChildCount() != 0) {
-								if(position >= 0 && (position + 1) < container.getChildCount()) {
-									ImageView ivIndicatorModulesSlidingTab1 = container.getChildAt(position).findViewById(R.id.ivIndicatorPageSlidingTab);
-									int width1 = ivIndicatorModulesSlidingTab1.getWidth();
-									ivIndicatorModulesSlidingTab1.setX(positionOffset * width1);
-									ivIndicatorModulesSlidingTab1.setVisibility(VISIBLE);
-									ImageView ivIndicatorModulesSlidingTab2 = container.getChildAt(position + 1).findViewById(R.id.ivIndicatorPageSlidingTab);
-									int width2 = ivIndicatorModulesSlidingTab2.getWidth();
-									ivIndicatorModulesSlidingTab2.setX((positionOffset * width2) - width2);
-									ivIndicatorModulesSlidingTab2.setVisibility(VISIBLE);
-									if((position + 1) != viewPager.getCurrentItem()) {
-										if(position < viewPager.getCurrentItem()) {
-											ivIndicatorModulesSlidingTab1.setVisibility(INVISIBLE);
-										}
-										if(position > viewPager.getCurrentItem()) {
-											ivIndicatorModulesSlidingTab2.setVisibility(INVISIBLE);
-										}
-									}
-								}
-							}
-						}
-
-						@Override
-						public void onPageSelected(int position) {
-							((ViewPagerAdapter) viewPager.getAdapter()).getItem(position).onResume();
-						}
-
-						@Override
-						public void onPageScrollStateChanged(int state) {
-							for(int x = 0; x < container.getChildCount(); x++) {
-								if(viewPager.getCurrentItem() != x) {
-									container.getChildAt(x).findViewById(R.id.ivIndicatorPageSlidingTab).setVisibility(INVISIBLE);
-								}
-							}
-						}
-					});
-				}
-				Log.e("paul", "page width: " + container.getWidth());
 				for(int x = 0; x < adapter.getCount(); x++) {
 					final int position = x;
 					View tabItem = LayoutInflater.from(context).inflate(R.layout.page_sliding_tab_item, container, false);
 					TextView tvTitlePageSlidingTab = tabItem.findViewById(R.id.tvTitlePageSlidingTab);
 					ImageView ivIndicatorPageSlidingTab = tabItem.findViewById(R.id.ivIndicatorPageSlidingTab);
-					tabItem.getLayoutParams().width = getWidth() / maxScrollItems;
+					tabItem.getLayoutParams().width = context.getResources().getDisplayMetrics().widthPixels / maxScrollItems;
 					tabItem.setOnClickListener(new OnClickListener() {
 						@Override
 						public void onClick(View view) {
-							viewPager.setCurrentItem(position, true);
+							viewPager.setCurrentItem(position, false);
 						}
 					});
 					CharSequence title = adapter.getPageTitle(position);
@@ -120,9 +77,33 @@ public class PageSlidingTab extends HorizontalScrollView {
 					else {
 						tvTitlePageSlidingTab.setVisibility(GONE);
 					}
+					if(x == 0) {
+						ivIndicatorPageSlidingTab.setVisibility(VISIBLE);
+					}
 					container.addView(tabItem);
+				}
+				if(container.getChildCount() != 0) {
+					viewPager.addOnPageChangeListener(new OnPageChangeListener() {
+						@Override
+						public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+						}
+
+						@Override
+						public void onPageSelected(int position) {
+							for(int x = 0; x < container.getChildCount(); x++) {
+								container.getChildAt(x).findViewById(R.id.ivIndicatorPageSlidingTab).setVisibility(position == x ? VISIBLE : INVISIBLE);
+							}
+							container.requestChildFocus(container.getChildAt(position), container.getChildAt(position));
+							((ViewPagerAdapter) viewPager.getAdapter()).getItem(position).onResume();
+						}
+
+						@Override
+						public void onPageScrollStateChanged(int state) {
+						}
+					});
 				}
 			}
 		}
+		addView(container);
 	}
 }
