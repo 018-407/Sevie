@@ -50,12 +50,15 @@ public class LoadingDialogFragment extends Fragment implements OnBackPressedCall
 					progress = 0;
 					switch(action) {
 						case AUTHORIZE_DEVICE:
-							max = 2;
+							max = 3;
 							result = Tx.authorizeDevice(db, bundle.getString("DEVICE_CODE"), bundle.getString("DEVICE_ID"), LoadingDialogFragment.this);
 							Thread.sleep(250);
 							handler.sendMessage(handler.obtainMessage());
 							if(result) {
 								Rx.company(db, LoadingDialogFragment.this);
+								Thread.sleep(250);
+								handler.sendMessage(handler.obtainMessage());
+								Rx.convention(db, LoadingDialogFragment.this);
 								Thread.sleep(250);
 								handler.sendMessage(handler.obtainMessage());
 							}
@@ -66,7 +69,7 @@ public class LoadingDialogFragment extends Fragment implements OnBackPressedCall
 							Thread.sleep(250);
 							handler.sendMessage(handler.obtainMessage());
 							if(result) {
-								Rx.employee(db, LoadingDialogFragment.this);
+								Rx.employees(db, LoadingDialogFragment.this);
 								Thread.sleep(250);
 								handler.sendMessage(handler.obtainMessage());
 							}
@@ -77,12 +80,12 @@ public class LoadingDialogFragment extends Fragment implements OnBackPressedCall
 							Thread.sleep(250);
 							handler.sendMessage(handler.obtainMessage());
 							if(result) {
-								Rx.company(db, LoadingDialogFragment.this);
+								result = Rx.convention(db, LoadingDialogFragment.this);
 								Thread.sleep(250);
 								handler.sendMessage(handler.obtainMessage());
 							}
 							if(result) {
-								Rx.company(db, LoadingDialogFragment.this);
+								result = Rx.employees(db, LoadingDialogFragment.this);
 								Thread.sleep(250);
 								handler.sendMessage(handler.obtainMessage());
 							}

@@ -19,7 +19,7 @@ public enum Convention {
 	),
 	VISITS(
 			"visits",
-			"Visit"
+			"Visits"
 	),
 	TEAMS(
 			"teams",

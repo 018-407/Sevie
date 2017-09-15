@@ -15,10 +15,6 @@ public class Get {
 		return db.getString("SELECT apiKey FROM " + Table.DEVICE.getName() + " WHERE ID = 1");
 	}
 
-	public static String employeeID(SQLiteAdapter db) {
-		return db.getString("SELECT employeeID FROM " + Table.ACCESS.getName() + " WHERE isLogOut = 0");
-	}
-
 	public static Company company(SQLiteAdapter db) {
 		Company company = new Company();
 		Cursor cursor = db.rawQuery("SELECT ID, name, deviceCode, address, mobile, landline, logoURL, expirationDate FROM " + Table.COMPANY.getName() + " LIMIT 1");
@@ -36,12 +32,24 @@ public class Get {
 		return company;
 	}
 
+	public static boolean isModuleEnabled(SQLiteAdapter db, String moduleID) {
+		return moduleID.equals(Modules.ATTENDANCE.getID()) || db.getInt("SELECT isEnabled FROM " + Table.MODULES.getName() + " WHERE name = '" + moduleID + "'") == 1;
+	}
+
+	public static String conventionName(SQLiteAdapter db, String conventionID) {
+		return db.getString("SELECT convention FROM " + Table.CONVENTION.getName() + " WHERE name = '" + conventionID + "'");
+	}
+
 	public static String companyName(SQLiteAdapter db) {
 		return db.getString("SELECT name FROM " + Table.COMPANY.getName() + " LIMIT 1");
 	}
 
 	public static String companyLogo(SQLiteAdapter db) {
 		return db.getString("SELECT logoURL FROM " + Table.COMPANY.getName() + " LIMIT 1");
+	}
+
+	public static String employeeID(SQLiteAdapter db) {
+		return db.getString("SELECT employeeID FROM " + Table.ACCESS.getName() + " WHERE isLogOut = 0");
 	}
 
 	public static Employee employee(SQLiteAdapter db, String employeeID) {
@@ -78,15 +86,6 @@ public class Get {
 
 	public static String employeePhoto(SQLiteAdapter db, String employeeID) {
 		return db.getString("SELECT photoURL FROM " + Table.EMPLOYEE.getName() + " WHERE ID = '" + employeeID + "'");
-	}
-
-	public static String conventionName(SQLiteAdapter db, String conventionID) {
-		String name = null;
-		return name;
-	}
-
-	public static boolean isModuleEnabled(SQLiteAdapter db, String moduleID) {
-		return moduleID.equals(Modules.ATTENDANCE.getID()) || db.getInt("SELECT isEnabled FROM " + Table.MODULES.getName() + " WHERE name = '" + moduleID + "'") == 1;
 	}
 
 	public static String timeInID(SQLiteAdapter db) {

@@ -4,6 +4,7 @@ import com.android.library.Sqlite.Condition;
 import com.android.library.Sqlite.FieldValue;
 import com.android.library.Sqlite.SQLiteAdapter;
 import com.android.library.Utils.Time;
+import com.mobileoptima.constants.Convention;
 import com.mobileoptima.constants.Table;
 import com.mobileoptima.models.Company;
 import com.mobileoptima.models.Employee;
@@ -26,22 +27,6 @@ public class Save {
 		return db.update(table, fieldValues, conditions);
 	}
 
-	public static boolean login(SQLiteAdapter db, String employeeID) {
-		ArrayList<FieldValue> fieldValues = new ArrayList<>();
-		fieldValues.add(new FieldValue("timestamp", Time.getTimestamp()));
-		fieldValues.add(new FieldValue("employeeID", employeeID));
-		return db.insert(Table.ACCESS.getName(), fieldValues) > 0;
-	}
-
-	public static boolean logout(SQLiteAdapter db) {
-		ArrayList<FieldValue> fieldValues = new ArrayList<>();
-		fieldValues.add(new FieldValue("isLogOut", true));
-		ArrayList<Condition> conditions = new ArrayList<>();
-		conditions.add(new Condition(new FieldValue("employeeID", Get.employeeID(db))));
-		conditions.add(new Condition(new FieldValue("isLogOut", false)));
-		return db.update(Table.ACCESS.getName(), fieldValues, conditions);
-	}
-
 	public static boolean company(SQLiteAdapter db, Company company) {
 		String table = Table.COMPANY.getName();
 		ArrayList<FieldValue> fieldValues = new ArrayList<>();
@@ -59,6 +44,48 @@ public class Save {
 		ArrayList<Condition> conditions = new ArrayList<>();
 		conditions.add(new Condition(new FieldValue("ID", company.ID)));
 		return db.update(table, fieldValues, conditions);
+	}
+
+	public static boolean moduleEnabled(SQLiteAdapter db, String module) {
+		String table = Table.MODULES.getName();
+		ArrayList<FieldValue> fieldValues = new ArrayList<>();
+		fieldValues.add(new FieldValue("name", module));
+		fieldValues.add(new FieldValue("isEnabled", true));
+		if(db.getCount("SELECT ID FROM " + table + " WHERE name = '" + module + "'") == 0) {
+			return db.insert(table, fieldValues) > 0;
+		}
+		ArrayList<Condition> conditions = new ArrayList<>();
+		conditions.add(new Condition(new FieldValue("name", module)));
+		return db.update(table, fieldValues, conditions);
+	}
+
+	public static boolean convention(SQLiteAdapter db, Convention convention, String name) {
+		String table = Table.CONVENTION.getName();
+		ArrayList<FieldValue> fieldValues = new ArrayList<>();
+		fieldValues.add(new FieldValue("name", convention.getID()));
+		fieldValues.add(new FieldValue("convention", name));
+		if(db.getCount("SELECT ID FROM " + table + " WHERE name = '" + convention.getID() + "'") == 0) {
+			return db.insert(table, fieldValues) > 0;
+		}
+		ArrayList<Condition> conditions = new ArrayList<>();
+		conditions.add(new Condition(new FieldValue("name", convention.getID())));
+		return db.update(table, fieldValues, conditions);
+	}
+
+	public static boolean login(SQLiteAdapter db, String employeeID) {
+		ArrayList<FieldValue> fieldValues = new ArrayList<>();
+		fieldValues.add(new FieldValue("timestamp", Time.getTimestamp()));
+		fieldValues.add(new FieldValue("employeeID", employeeID));
+		return db.insert(Table.ACCESS.getName(), fieldValues) > 0;
+	}
+
+	public static boolean logout(SQLiteAdapter db) {
+		ArrayList<FieldValue> fieldValues = new ArrayList<>();
+		fieldValues.add(new FieldValue("isLogOut", true));
+		ArrayList<Condition> conditions = new ArrayList<>();
+		conditions.add(new Condition(new FieldValue("employeeID", Get.employeeID(db))));
+		conditions.add(new Condition(new FieldValue("isLogOut", false)));
+		return db.update(Table.ACCESS.getName(), fieldValues, conditions);
 	}
 
 	public static boolean employee(SQLiteAdapter db, Employee employee) {
@@ -79,19 +106,6 @@ public class Save {
 		}
 		ArrayList<Condition> conditions = new ArrayList<>();
 		conditions.add(new Condition(new FieldValue("ID", employee.ID)));
-		return db.update(table, fieldValues, conditions);
-	}
-
-	public static boolean moduleEnabled(SQLiteAdapter db, String module) {
-		String table = Table.MODULES.getName();
-		ArrayList<FieldValue> fieldValues = new ArrayList<>();
-		fieldValues.add(new FieldValue("name", module));
-		fieldValues.add(new FieldValue("isEnabled", true));
-		if(db.getCount("SELECT ID FROM " + table + " WHERE name = '" + module + "'") == 0) {
-			return db.insert(table, fieldValues) > 0;
-		}
-		ArrayList<Condition> conditions = new ArrayList<>();
-		conditions.add(new Condition(new FieldValue("name", module)));
 		return db.update(table, fieldValues, conditions);
 	}
 }

@@ -21,6 +21,9 @@ public enum Table {
 	MODULES("modules_tb", ", name TEXT" +
 			", isEnabled TEXT"
 	),
+	CONVENTION("convention_tb", ", name TEXT" +
+			", convention TEXT"
+	),
 	SYNC_BATCH("sync_batch_tb", ", timestamp TEXT" +
 			", syncBatchID TEXT"
 	),

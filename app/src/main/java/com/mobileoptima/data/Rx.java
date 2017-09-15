@@ -2,8 +2,10 @@ package com.mobileoptima.data;
 
 import com.android.library.Connection.Http;
 import com.android.library.Sqlite.SQLiteAdapter;
-import com.mobileoptima.Utils.Util;
+import com.android.library.Utils.Util;
+import com.mobileoptima.Utils.Utils;
 import com.mobileoptima.constants.App;
+import com.mobileoptima.constants.Convention;
 import com.mobileoptima.constants.Modules;
 import com.mobileoptima.constants.Settings;
 import com.mobileoptima.constants.Table;
@@ -12,7 +14,6 @@ import com.mobileoptima.models.Employee;
 import com.mobileoptima.models.Team;
 
 import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.HashMap;
@@ -26,46 +27,10 @@ public class Rx {
 		String url = App.WEB_API + "get-company";
 		String params = Http.jasonObjectToURL(new JSONObject(map));
 		String response = Http.get(url, params, Settings.HTTP_REQUEST_TIMEOUT_RX);
-		Util.log("company", url);
-		Util.log("company", params);
-		Util.log("company", response);
-		JSONObject responseObj;
-		try {
-			responseObj = new JSONObject(response);
-		}
-		catch(JSONException e) {
-			errorCallback.onError(params, response, e.getMessage(), false);
-			return false;
-		}
-		JSONObject errorObj = responseObj.optJSONObject("error");
-		if(errorObj != null) {
-			String message = errorObj.optString("message");
-			if(!message.isEmpty()) {
-				errorCallback.onError(params, response, message, false);
-			}
-			return false;
-		}
-		JSONArray initArray = responseObj.optJSONArray("init");
-		if(initArray != null) {
-			for(int x = 0; x < initArray.length(); x++) {
-				JSONObject initObj = initArray.optJSONObject(x);
-				if(initObj != null) {
-					String status = initObj.optString("status");
-					int recNo = initObj.optInt("recno");
-					if(status.isEmpty() || !status.equals("ok")) {
-						String message = initObj.optString("message");
-						if(!message.isEmpty()) {
-							errorCallback.onError(params, response, message, true);
-						}
-						return false;
-					}
-					if(recNo == 0) {
-						return true;
-					}
-				}
-			}
-		}
-		JSONArray dataArray = responseObj.optJSONArray("data");
+		Utils.log("company", url);
+		Utils.log("company", params);
+		Utils.log("company", response);
+		JSONArray dataArray = Utils.getDataArray(params, response, errorCallback);
 		if(dataArray == null) {
 			return false;
 		}
@@ -91,59 +56,63 @@ public class Rx {
 		return db.endTransaction();
 	}
 
-	public static boolean employee(SQLiteAdapter db, OnErrorCallback errorCallback) {
+	public static boolean convention(SQLiteAdapter db, OnErrorCallback errorCallback) {
+		HashMap<String, Object> map = new HashMap<>();
+		map.put("api_key", Get.apiKey(db));
+		String url = App.WEB_API + "get-naming-convention";
+		String params = Http.jasonObjectToURL(new JSONObject(map));
+		String response = Http.get(url, params, Settings.HTTP_REQUEST_TIMEOUT_RX);
+		Utils.log("convention", url);
+		Utils.log("convention", params);
+		Utils.log("convention", response);
+		JSONArray dataArray = Utils.getDataArray(params, response, errorCallback);
+		if(dataArray == null) {
+			return false;
+		}
+		db.beginTransaction();
+		for(int x = 0; x < dataArray.length(); x++) {
+			JSONObject dataObj = dataArray.optJSONObject(x);
+			for(Convention convention : Convention.values()) {
+				String name = dataObj.optString(convention.getID());
+				if(!name.isEmpty()) {
+					if(name.equals("keep")) {
+						switch(convention.getID()) {
+							case "startday":
+								name = "time in";
+								break;
+							case "endday":
+								name = "time out";
+								break;
+							default:
+								name = convention.getID();
+								break;
+						}
+					}
+					name = Util.camelCase(name);
+					Save.convention(db, convention, name);
+				}
+			}
+		}
+		return db.endTransaction();
+	}
+
+	public static boolean employees(SQLiteAdapter db, OnErrorCallback errorCallback) {
 		HashMap<String, Object> map = new HashMap<>();
 		map.put("api_key", Get.apiKey(db));
 		String url = App.WEB_API + "get-employee-details";
 		String params = Http.jasonObjectToURL(new JSONObject(map));
 		String response = Http.get(url, params, Settings.HTTP_REQUEST_TIMEOUT_RX);
-		Util.log("employees", url);
-		Util.log("employees", params);
-		Util.log("employees", response);
-		JSONObject responseObj;
-		try {
-			responseObj = new JSONObject(response);
-		}
-		catch(JSONException e) {
-			errorCallback.onError(params, response, e.getMessage(), false);
-			return false;
-		}
-		JSONObject errorObj = responseObj.optJSONObject("error");
-		if(errorObj != null) {
-			String message = errorObj.optString("message");
-			if(!message.isEmpty()) {
-				errorCallback.onError(params, response, message, false);
-			}
-			return false;
-		}
-		JSONArray initArray = responseObj.optJSONArray("init");
-		if(initArray != null) {
-			for(int x = 0; x < initArray.length(); x++) {
-				JSONObject initObj = initArray.optJSONObject(x);
-				if(initObj != null) {
-					String status = initObj.optString("status");
-					int recNo = initObj.optInt("recno");
-					if(status.isEmpty() || !status.equals("ok")) {
-						String message = initObj.optString("message");
-						if(!message.isEmpty()) {
-							errorCallback.onError(params, response, message, true);
-						}
-						return false;
-					}
-					if(recNo == 0) {
-						return true;
-					}
-				}
-			}
-		}
-		JSONArray dataArray = responseObj.optJSONArray("data");
+		Utils.log("employees", url);
+		Utils.log("employees", params);
+		Utils.log("employees", response);
+		JSONArray dataArray = Utils.getDataArray(params, response, errorCallback);
 		if(dataArray == null) {
 			return false;
 		}
 		db.beginTransaction();
 		db.rawQuery("UPDATE " + Table.EMPLOYEE.getName() + " SET isActive = 0");
-		for(int y = 0; y < dataArray.length(); y++) {
-			JSONObject dataObj = dataArray.optJSONObject(y);
+		for(int x = 0; x < dataArray.length(); x++) {
+			JSONObject dataObj = dataArray.optJSONObject(x);
 			Employee employee = new Employee();
 			employee.ID = dataObj.optString("employee_id");
 			employee.firstName = dataObj.optString("firstname");

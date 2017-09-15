@@ -42,7 +42,8 @@ import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity implements OnRefreshCallback, OnInitializeCallback, OnClickListener {
 	private ArrayList<Fragment> vpFragments;
-	private ArrayList<String> vpTabs;
+	private ArrayList<String> vpTabTitles;
+	private ArrayList<Integer> vpTabIcons;
 	private DisplayImageOptions ivEmployeePhotoHeaderDrawerMainOptions, ivCompanyLogoHeaderDrawerMainOptions;
 	private DrawerLayout dlMain;
 	private FragmentManager manager;
@@ -77,7 +78,8 @@ public class MainActivity extends AppCompatActivity implements OnRefreshCallback
 		vpMain = findViewById(R.id.vpMain);
 		stMain = findViewById(R.id.stMain);
 		vpFragments = new ArrayList<>();
-		vpTabs = new ArrayList<>();
+		vpTabTitles = new ArrayList<>();
+		vpTabIcons = new ArrayList<>();
 		dlMain.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
 		llMenuAppBarMain.setOnClickListener(this);
 		RoundedBitmapDrawable roundUserPlaceholder = RoundedBitmapDrawableFactory.create(res, BitmapFactory.decodeResource(res, R.drawable.ic_user_placeholder));
@@ -151,6 +153,9 @@ public class MainActivity extends AppCompatActivity implements OnRefreshCallback
 			String name = Get.conventionName(db, convention.getID());
 			if(name != null && !name.isEmpty()) {
 				convention.setName(name);
+				if(convention == Convention.VISITS) {
+					Modules.VISITS.setName(name);
+				}
 			}
 		}
 		String timeInID = Get.timeInID(db);
@@ -166,17 +171,20 @@ public class MainActivity extends AppCompatActivity implements OnRefreshCallback
 			updateMenuItem(llMenuItemsDrawerMain, menu);
 		}
 		vpFragments.clear();
-		vpTabs.clear();
+		vpTabTitles.clear();
+		vpTabIcons.clear();
 		vpFragments.add(new HomeFragment());
-		vpTabs.add("Home");
+		vpTabTitles.add("Home");
+		vpTabIcons.add(R.drawable.ic_module_home);
 		for(Modules module : Modules.values()) {
 			if(Get.isModuleEnabled(db, module.getID())) {
 				vpFragments.add(module.getFragment());
-				vpTabs.add(module.getName());
+				vpTabTitles.add(module.getName());
+				vpTabIcons.add(module.getIcon());
 			}
 		}
 		if(vpAdapter == null) {
-			vpAdapter = new ViewPagerAdapter(manager, vpFragments, vpTabs);
+			vpAdapter = new ViewPagerAdapter(manager, vpFragments, vpTabTitles, vpTabIcons);
 			vpMain.setOffscreenPageLimit(6);
 			vpMain.setAdapter(vpAdapter);
 			stMain.setViewPager(vpMain);
@@ -292,9 +300,5 @@ public class MainActivity extends AppCompatActivity implements OnRefreshCallback
 		((ImageView) menuItem.findViewById(R.id.ivIconMenu)).setImageResource(menu.getIcon());
 		((TextView) menuItem.findViewById(R.id.tvTextMenu)).setText(menu.getName());
 		menuItem.setOnClickListener(this);
-	}
-
-	public void updateModules() {
-
 	}
 }
