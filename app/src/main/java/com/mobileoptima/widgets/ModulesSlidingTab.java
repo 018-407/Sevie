@@ -9,8 +9,9 @@ import android.view.View;
 import android.widget.HorizontalScrollView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.TextView;
+import android.widget.RelativeLayout;
 
+import com.android.library.widgets.CustomTextView;
 import com.android.library.widgets.ViewPagerAdapter;
 import com.mobileoptima.tarkieattendance.R;
 
@@ -61,8 +62,10 @@ public class ModulesSlidingTab extends HorizontalScrollView {
 				for(int x = 0; x < adapter.getCount(); x++) {
 					final int position = x;
 					View tabItem = LayoutInflater.from(context).inflate(R.layout.modules_sliding_tab_item, container, false);
-					ImageView ivIconModulesSlingTab = tabItem.findViewById(R.id.ivIconModulesSlingTab);
-					TextView tvTitleModulesSlidingTab = tabItem.findViewById(R.id.tvTitleModulesSlidingTab);
+					RelativeLayout rlIconModulesSlidingTab = tabItem.findViewById(R.id.rlIconModulesSlidingTab);
+					ImageView ivIconModulesSlidingTab = tabItem.findViewById(R.id.ivIconModulesSlidingTab);
+					CustomTextView tvIconModulesSlidingTab = tabItem.findViewById(R.id.tvIconModulesSlidingTab);
+					CustomTextView tvTitleModulesSlidingTab = tabItem.findViewById(R.id.tvTitleModulesSlidingTab);
 					ImageView ivIndicatorModulesSlidingTab = tabItem.findViewById(R.id.ivIndicatorModulesSlidingTab);
 					tabItem.getLayoutParams().width = context.getResources().getDisplayMetrics().widthPixels / maxScrollItems;
 					tabItem.setOnClickListener(new OnClickListener() {
@@ -73,10 +76,19 @@ public class ModulesSlidingTab extends HorizontalScrollView {
 					});
 					Integer icon = adapter.getTabIcons(position);
 					if(icon != null) {
-						ivIconModulesSlingTab.setImageResource(icon);
+						switch(context.getResources().getResourceTypeName(icon)) {
+							case "drawable":
+								ivIconModulesSlidingTab.setImageResource(icon);
+								ivIconModulesSlidingTab.setVisibility(VISIBLE);
+								break;
+							case "string":
+								tvIconModulesSlidingTab.setText(icon);
+								tvIconModulesSlidingTab.setVisibility(VISIBLE);
+								break;
+						}
 					}
 					else {
-						ivIconModulesSlingTab.setVisibility(GONE);
+						rlIconModulesSlidingTab.setVisibility(GONE);
 					}
 					CharSequence title = adapter.getPageTitle(position);
 					if(title != null) {

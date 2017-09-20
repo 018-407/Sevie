@@ -13,7 +13,7 @@ public enum Modules {
 	VISITS("itinerary", Convention.VISITS.getName(), R.drawable.ic_module_visits, new VisitsFragment()),
 	EXPENSE("expense", "Expense", R.drawable.ic_module_expense, new ExpenseFragment()),
 	INVENTORY("inventory", "Inventory", R.drawable.ic_module_inventory, new InventoryFragment()),
-	FORMS("forms", "Entries", R.drawable.ic_module_forms, new FormsFragment()),
+	FORMS("forms", "Entries", R.string.fa_folder_open, new FormsFragment()),
 	ATTENDANCE("attendance", "History", R.drawable.ic_module_attendance, new AttendanceFragment());
 	final Fragment fragment;
 	final String ID;

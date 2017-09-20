@@ -10,10 +10,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
-import android.widget.TextView;
 
 import com.android.library.Sqlite.SQLiteAdapter;
 import com.android.library.Utils.UI;
+import com.android.library.widgets.CustomTextView;
 import com.mobileoptima.constants.Action;
 import com.mobileoptima.data.Rx;
 import com.mobileoptima.data.Tx;
@@ -31,7 +31,7 @@ public class LoadingDialogFragment extends Fragment implements OnBackPressedCall
 	private ProgressBar pbLoadingDialog;
 	private SQLiteAdapter db;
 	private String message;
-	private TextView tvProgressLoadingDialog, tvCompletionLoadingDialog;
+	private CustomTextView tvProgressLoadingDialog, tvCompletionLoadingDialog;
 	private Thread thread;
 	private boolean isSaveInstanceState, result, isFinish;
 	private int progress, max, percent;
@@ -123,7 +123,7 @@ public class LoadingDialogFragment extends Fragment implements OnBackPressedCall
 	@Override
 	public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 		View view = inflater.inflate(R.layout.loading_dialog_layout, container, false);
-		TextView tvTitleLoadingDialog = view.findViewById(R.id.tvTitleLoadingDialog);
+		CustomTextView tvTitleLoadingDialog = view.findViewById(R.id.tvTitleLoadingDialog);
 		pbLoadingDialog = view.findViewById(R.id.pbLoadingDialog);
 		tvProgressLoadingDialog = view.findViewById(R.id.tvProgressLoadingDialog);
 		tvCompletionLoadingDialog = view.findViewById(R.id.tvCompletionLoadingDialog);
@@ -204,7 +204,7 @@ public class LoadingDialogFragment extends Fragment implements OnBackPressedCall
 			alert.setOnRefreshCallback(this);
 			alert.setTitle(action.getName());
 			alert.setMessage(message);
-			alert.setPositiveButton("Ok", new View.OnClickListener() {
+			alert.setPositiveButton("OK", new View.OnClickListener() {
 				@Override
 				public void onClick(View view) {
 					manager.popBackStack();

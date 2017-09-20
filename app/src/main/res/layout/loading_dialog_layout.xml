@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/black_trans_sixty"
@@ -15,7 +16,7 @@
         android:orientation="vertical"
         android:padding="@dimen/sixteen">
 
-        <TextView
+        <com.android.library.widgets.CustomTextView
             android:id="@+id/tvTitleLoadingDialog"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -23,7 +24,8 @@
             android:layout_marginBottom="@dimen/twelve"
             android:text="Loading..."
             android:textColor="@color/theme_pri"
-            android:textSize="@dimen/eighteen"/>
+            android:textSize="@dimen/twenty"
+            app:typeface="@string/proxima_nova_semi_bold"/>
 
         <RelativeLayout
             android:layout_width="wrap_content"
@@ -43,24 +45,26 @@
                 android:progressDrawable="@drawable/pb_progress"
                 android:rotation="270"/>
 
-            <TextView
+            <com.android.library.widgets.CustomTextView
                 android:id="@+id/tvProgressLoadingDialog"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerInParent="true"
                 android:text="0%"
                 android:textColor="@color/theme_pri"
-                android:textSize="@dimen/sixteen"/>
+                android:textSize="@dimen/eighteen"
+                app:typeface="@string/proxima_nova_light"/>
 
         </RelativeLayout>
 
-        <TextView
+        <com.android.library.widgets.CustomTextView
             android:id="@+id/tvCompletionLoadingDialog"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="0/100"
             android:textColor="@color/text_pri"
-            android:textSize="@dimen/fourteen"/>
+            android:textSize="@dimen/sixteen"
+            app:typeface="@string/proxima_nova_light"/>
 
     </LinearLayout>
 

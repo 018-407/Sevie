@@ -18,11 +18,11 @@ import android.view.View.OnClickListener;
 import android.view.Window;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.TextView;
 
 import com.android.library.Sqlite.SQLiteAdapter;
 import com.android.library.Utils.Cache;
 import com.android.library.Utils.UI;
+import com.android.library.widgets.CustomTextView;
 import com.android.library.widgets.ViewPagerAdapter;
 import com.mobileoptima.constants.Action;
 import com.mobileoptima.constants.App;
@@ -55,7 +55,7 @@ public class MainActivity extends AppCompatActivity implements OnRefreshCallback
 	private Resources res;
 	private ModulesSlidingTab stMain;
 	private SQLiteAdapter db;
-	private TextView tvEmployeeNameHeaderDrawerMain, tvEmployeeNumberHeaderDrawerMain;
+	private CustomTextView tvEmployeeNameHeaderDrawerMain, tvEmployeeNumberHeaderDrawerMain;
 	private ViewPager vpMain;
 	private ViewPagerAdapter vpAdapter;
 	private Window window;
@@ -176,7 +176,7 @@ public class MainActivity extends AppCompatActivity implements OnRefreshCallback
 		vpTabIcons.clear();
 		vpFragments.add(new HomeFragment());
 		vpTabTitles.add("Home");
-		vpTabIcons.add(R.drawable.ic_module_home);
+		vpTabIcons.add(R.string.fa_home);
 		for(Modules module : Modules.values()) {
 			if(Get.isModuleEnabled(db, module.getID())) {
 				vpFragments.add(module.getFragment());
@@ -303,8 +303,22 @@ public class MainActivity extends AppCompatActivity implements OnRefreshCallback
 			container.addView(menuItem, index);
 		}
 		menuItem = container.getChildAt(index);
-		((ImageView) menuItem.findViewById(R.id.ivIconMenu)).setImageResource(menu.getIcon());
-		((TextView) menuItem.findViewById(R.id.tvTextMenu)).setText(menu.getName());
+		switch(res.getResourceTypeName(menu.getIcon())) {
+			case "drawable":
+				ImageView ivIconMenu = menuItem.findViewById(R.id.ivIconMenu);
+				ivIconMenu.setBackgroundResource(menu.getIcon());
+				ivIconMenu.setVisibility(View.VISIBLE);
+				break;
+			case "string":
+				CustomTextView tvIconMenu = menuItem.findViewById(R.id.tvIconMenu);
+				if(menu == Menu.UPDATE_MASTER_FILE) {
+					tvIconMenu.setRotation(90f);
+				}
+				tvIconMenu.setText(menu.getIcon());
+				tvIconMenu.setVisibility(View.VISIBLE);
+				break;
+		}
+		((CustomTextView) menuItem.findViewById(R.id.tvTextMenu)).setText(menu.getName());
 		menuItem.setOnClickListener(this);
 	}
 }

@@ -1,5 +1,6 @@
 <android.support.v4.widget.DrawerLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/dlMain"
     android:layout_width="match_parent"
@@ -26,23 +27,26 @@
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:background="@drawable/state_rect_black_trans_thirty"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:padding="@dimen/twenty">
 
-                <ImageView
-                    android:layout_width="@dimen/fifty_six"
-                    android:layout_height="@dimen/fifty_six"
-                    android:padding="@dimen/twenty"
-                    android:src="@drawable/ic_menu"/>
-
-                <TextView
-                    android:layout_width="wrap_content"
+                <com.android.library.widgets.CustomTextView
+                    android:layout_width="@dimen/sixteen"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
                     android:layout_marginEnd="@dimen/sixteen"
                     android:layout_marginRight="@dimen/sixteen"
+                    android:text="@string/fa_navicon_alias"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/sixteen"
+                    app:typeface="@string/fontawesome"/>
+
+                <com.android.library.widgets.CustomTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
                     android:text="Menu"
                     android:textColor="@color/white"
-                    android:textSize="@dimen/sixteen"/>
+                    android:textSize="@dimen/sixteen"
+                    app:typeface="@string/proxima_nova_light"/>
 
             </LinearLayout>
 
@@ -87,7 +91,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content">
 
-                    <TextView
+                    <com.android.library.widgets.CustomTextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_vertical"
@@ -182,20 +186,22 @@
 
                 </RelativeLayout>
 
-                <TextView
+                <com.android.library.widgets.CustomTextView
                     android:id="@+id/tvEmployeeNameHeaderDrawerMain"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/sixteen"
                     android:textColor="@color/white"
-                    android:textSize="@dimen/sixteen"/>
+                    android:textSize="@dimen/eighteen"
+                    app:typeface="@string/proxima_nova_light"/>
 
-                <TextView
+                <com.android.library.widgets.CustomTextView
                     android:id="@+id/tvEmployeeNumberHeaderDrawerMain"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textColor="@color/white"
-                    android:textSize="@dimen/twelve"/>
+                    android:textSize="@dimen/fourteen"
+                    app:typeface="@string/proxima_nova_light"/>
 
             </LinearLayout>
 

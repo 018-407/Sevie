@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/black_trans_sixty"
@@ -15,7 +16,7 @@
         android:orientation="vertical"
         android:padding="@dimen/sixteen">
 
-        <TextView
+        <com.android.library.widgets.CustomTextView
             android:id="@+id/tvTitleAlertDialog"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -23,9 +24,10 @@
             android:layout_marginBottom="@dimen/twelve"
             android:text="Title"
             android:textColor="@color/theme_pri"
-            android:textSize="@dimen/eighteen"/>
+            android:textSize="@dimen/twenty"
+            app:typeface="@string/proxima_nova_semi_bold"/>
 
-        <TextView
+        <com.android.library.widgets.CustomTextView
             android:id="@+id/tvMessageAlertDialog"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -34,7 +36,8 @@
             android:gravity="center_horizontal"
             android:text="Message"
             android:textColor="@color/text_pri"
-            android:textSize="@dimen/sixteen"/>
+            android:textSize="@dimen/eighteen"
+            app:typeface="@string/proxima_nova_light"/>
 
         <LinearLayout
             android:layout_width="wrap_content"
@@ -42,31 +45,35 @@
             android:layout_gravity="center"
             android:orientation="horizontal">
 
-            <Button
+            <com.android.library.widgets.CustomButton
                 android:id="@+id/btnNegativeAlertDialog"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="@dimen/five"
                 android:background="@drawable/bg_button_ter"
+                android:gravity="center"
                 android:minHeight="0dp"
                 android:minWidth="@dimen/one_hundred"
                 android:padding="@dimen/btn_padding"
                 android:text="No"
                 android:textColor="@color/btn_text_ter"
-                android:textSize="@dimen/btn_size"/>
+                android:textSize="@dimen/btn_size"
+                app:typeface="@string/proxima_nova_semi_bold"/>
 
-            <Button
+            <com.android.library.widgets.CustomButton
                 android:id="@+id/btnPositiveAlertDialog"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="@dimen/five"
                 android:background="@drawable/bg_button_pri"
+                android:gravity="center"
                 android:minHeight="0dp"
                 android:minWidth="@dimen/one_hundred"
                 android:padding="@dimen/btn_padding"
                 android:text="Yes"
                 android:textColor="@color/btn_text_pri"
-                android:textSize="@dimen/btn_size"/>
+                android:textSize="@dimen/btn_size"
+                app:typeface="@string/proxima_nova_semi_bold"/>
 
         </LinearLayout>
 

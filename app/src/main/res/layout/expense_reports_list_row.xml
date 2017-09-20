@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@drawable/state_rect_black_trans_thirty"
+    android:padding="@dimen/ten">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_toLeftOf="@+id/llStatusExpenseReports"
+        android:layout_toStartOf="@+id/llStatusExpenseReports"
+        android:orientation="vertical">
+
+        <com.android.library.widgets.CustomTextView
+            android:id="@+id/tvNameExpenseReports"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/five"
+            android:layout_marginRight="@dimen/five"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:singleLine="true"
+            android:text="Cebu Conference"
+            android:textColor="@color/text_pri"
+            android:textSize="@dimen/seventeen"
+            app:typeface="@string/proxima_nova_semi_bold"/>
+
+        <com.android.library.widgets.CustomTextView
+            android:id="@+id/tvTotalExpenseReports"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/five"
+            android:layout_marginRight="@dimen/five"
+            android:text="PHP 0.00"
+            android:textAllCaps="true"
+            android:textColor="@color/text_sec"
+            android:textSize="@dimen/fifteen"
+            app:typeface="@string/proxima_nova_light"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/llStatusExpenseReports"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="@dimen/five"
+        android:layout_marginRight="@dimen/five"
+        android:layout_toLeftOf="@+id/ivNextExpenseReports"
+        android:layout_toStartOf="@+id/ivNextExpenseReports"
+        android:orientation="vertical">
+
+        <com.android.library.widgets.CustomTextView
+            android:id="@+id/tvDateExpenseReports"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Jan 23, 2017"
+            android:textColor="@color/text_sec"
+            android:textSize="@dimen/fifteen"
+            app:typeface="@string/proxima_nova_light"/>
+
+        <com.android.library.widgets.CustomTextView
+            android:id="@+id/tvStatusExpenseReports"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Draft"
+            android:textColor="@color/orange_500"
+            android:textSize="@dimen/fifteen"
+            app:typeface="@string/proxima_nova_light"/>
+
+    </LinearLayout>
+
+    <ImageView
+        android:id="@+id/ivNextExpenseReports"
+        android:layout_width="@dimen/seven"
+        android:layout_height="@dimen/fifteen"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"/>
+    <!--android:src="@drawable/ic_next_dark"-->
+
+</RelativeLayout>

@@ -9,8 +9,8 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.TextView;
 
+import com.android.library.widgets.CustomTextView;
 import com.mobileoptima.interfaces.Callback.OnBackPressedCallback;
 import com.mobileoptima.interfaces.Callback.OnRefreshCallback;
 
@@ -33,8 +33,8 @@ public class AlertDialogFragment extends Fragment implements OnBackPressedCallba
 	@Override
 	public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 		View view = inflater.inflate(R.layout.alert_dialog_layout, container, false);
-		TextView tvTitleAlertDialog = view.findViewById(R.id.tvTitleAlertDialog);
-		TextView tvMessageAlertDialog = view.findViewById(R.id.tvMessageAlertDialog);
+		CustomTextView tvTitleAlertDialog = view.findViewById(R.id.tvTitleAlertDialog);
+		CustomTextView tvMessageAlertDialog = view.findViewById(R.id.tvMessageAlertDialog);
 		Button btnPositiveAlertDialog = view.findViewById(R.id.btnPositiveAlertDialog);
 		Button btnNegativeAlertDialog = view.findViewById(R.id.btnNegativeAlertDialog);
 		if(title != null) {

@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <RelativeLayout
+        android:id="@+id/rlTotalExpenseItems"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/state_rect_black_trans_thirty"
+        android:paddingBottom="@dimen/fifteen"
+        android:paddingEnd="@dimen/ten"
+        android:paddingLeft="@dimen/ten"
+        android:paddingRight="@dimen/ten"
+        android:paddingStart="@dimen/ten"
+        android:paddingTop="@dimen/fifteen">
+
+        <com.android.library.widgets.CustomTextView
+            android:id="@+id/tvDateExpenseItems"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/five"
+            android:layout_marginRight="@dimen/five"
+            android:layout_toLeftOf="@+id/tvTotalExpenseItems"
+            android:layout_toStartOf="@+id/tvTotalExpenseItems"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:singleLine="true"
+            android:textColor="@color/text_sec"
+            android:textSize="@dimen/seventeen"
+            app:typeface="@string/proxima_nova_semi_bold"/>
+
+        <com.android.library.widgets.CustomTextView
+            android:id="@+id/tvTotalExpenseItems"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/ten"
+            android:layout_marginRight="@dimen/ten"
+            android:layout_toLeftOf="@+id/ivCollapsibleExpenseItems"
+            android:layout_toStartOf="@+id/ivCollapsibleExpenseItems"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:singleLine="true"
+            android:textColor="@color/text_sec"
+            android:textSize="@dimen/seventeen"
+            app:typeface="@string/proxima_nova_semi_bold"/>
+
+        <ImageView
+            android:id="@+id/ivCollapsibleExpenseItems"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"/>
+        <!--android:src="@drawable/ic_down_dark"-->
+
+    </RelativeLayout>
+
+    <LinearLayout
+        android:id="@+id/llItemsExpenseItems"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/rlTotalExpenseItems"
+        android:orientation="vertical"/>
+
+</RelativeLayout>

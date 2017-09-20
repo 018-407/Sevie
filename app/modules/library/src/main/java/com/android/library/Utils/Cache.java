@@ -1,6 +1,7 @@
 package com.android.library.Utils;
 
 import android.content.Context;
+import android.graphics.Typeface;
 
 import com.android.library.Sqlite.SQLiteAdapter;
 import com.nostra13.universalimageloader.core.ImageLoader;
@@ -11,6 +12,7 @@ import java.util.Hashtable;
 public class Cache {
 	private static final Hashtable<String, ImageLoader> IMAGE_LOADER = new Hashtable<>();
 	private static final Hashtable<String, SQLiteAdapter> SQLITE_ADAPTER = new Hashtable<>();
+	private static final Hashtable<String, Typeface> TYPEFACE = new Hashtable<>();
 
 	public static ImageLoader getImageLoader(Context context) {
 		String key = "IMAGE_LOADER";
@@ -30,13 +32,20 @@ public class Cache {
 	}
 
 	public static SQLiteAdapter getSQLiteAdapter(Context context, String database, int version) {
-		String key = "SQLITE_ADAPTER";
 		synchronized(SQLITE_ADAPTER) {
-			if(!SQLITE_ADAPTER.containsKey(key)) {
-				SQLiteAdapter db = new SQLiteAdapter(context, database, version);
-				SQLITE_ADAPTER.put(key, db);
+			if(!SQLITE_ADAPTER.containsKey(database)) {
+				SQLITE_ADAPTER.put(database, new SQLiteAdapter(context, database, version));
 			}
 		}
-		return SQLITE_ADAPTER.get(key);
+		return SQLITE_ADAPTER.get(database);
+	}
+
+	public static Typeface getTypeface(Context context, String typeface) {
+		synchronized(TYPEFACE) {
+			if(!TYPEFACE.containsKey(typeface)) {
+				TYPEFACE.put(typeface, Typeface.createFromAsset(context.getAssets(), typeface));
+			}
+		}
+		return TYPEFACE.get(typeface);
 	}
 }

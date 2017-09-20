@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical">
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/one"
+        android:background="@color/divider"/>
+
+    <RelativeLayout
+        android:id="@+id/rlExpenseItems"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/state_rect_black_trans_thirty"
+        android:paddingBottom="@dimen/eight"
+        android:paddingEnd="@dimen/thirty_five"
+        android:paddingLeft="@dimen/thirty_five"
+        android:paddingRight="@dimen/thirty_five"
+        android:paddingStart="@dimen/thirty_five"
+        android:paddingTop="@dimen/eight">
+
+        <com.android.library.widgets.CustomTextView
+            android:id="@+id/tvExpenseTypeExpenseItems"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/five"
+            android:layout_marginRight="@dimen/five"
+            android:layout_toLeftOf="@+id/tvAmountExpenseItems"
+            android:layout_toStartOf="@+id/tvAmountExpenseItems"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:singleLine="true"
+            android:text="Expense 1"
+            android:textColor="@color/text_sec"
+            android:textSize="@dimen/seventeen"
+            app:typeface="@string/proxima_nova_light"/>
+
+        <com.android.library.widgets.CustomTextView
+            android:id="@+id/tvTimeExpenseItems"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tvExpenseTypeExpenseItems"
+            android:layout_marginEnd="@dimen/five"
+            android:layout_marginRight="@dimen/five"
+            android:layout_toLeftOf="@+id/tvAmountExpenseItems"
+            android:layout_toStartOf="@+id/tvAmountExpenseItems"
+            android:text="8:12 AM"
+            android:textColor="@color/text_sec"
+            android:textSize="@dimen/fourteen"
+            app:typeface="@string/proxima_nova_light"/>
+
+        <com.android.library.widgets.CustomTextView
+            android:id="@+id/tvAmountExpenseItems"
+            android:layout_width="@dimen/one_hundred_fifty"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:ellipsize="end"
+            android:gravity="end|right"
+            android:maxLines="1"
+            android:singleLine="true"
+            android:text="PHP 100.00"
+            android:textColor="@color/text_sec"
+            android:textSize="@dimen/seventeen"
+            app:typeface="@string/proxima_nova_light"/>
+
+    </RelativeLayout>
+
+</LinearLayout>

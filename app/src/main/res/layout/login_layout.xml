@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/white"
@@ -37,7 +38,7 @@
         android:orientation="vertical"
         android:padding="@dimen/twenty_four">
 
-        <EditText
+        <com.android.library.widgets.CustomEditText
             android:id="@+id/etUsernameLogin"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -49,9 +50,10 @@
             android:padding="@dimen/et_padding"
             android:textColor="@color/text_pri"
             android:textColorHint="@color/et_hint"
-            android:textSize="@dimen/et_size"/>
+            android:textSize="@dimen/et_size"
+            app:typeface="@string/proxima_nova_light"/>
 
-        <EditText
+        <com.android.library.widgets.CustomEditText
             android:id="@+id/etPasswordLogin"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -64,9 +66,10 @@
             android:padding="@dimen/et_padding"
             android:textColor="@color/text_pri"
             android:textColorHint="@color/et_hint"
-            android:textSize="@dimen/et_size"/>
+            android:textSize="@dimen/et_size"
+            app:typeface="@string/proxima_nova_light"/>
 
-        <Button
+        <com.android.library.widgets.CustomButton
             android:id="@+id/btnLogin"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

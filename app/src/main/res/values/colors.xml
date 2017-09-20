@@ -18,7 +18,8 @@
     <color name="btn_text_ter">@color/white</color>
     <color name="btn_background_ter">@color/grey_600</color>
 
-    <color name="text_pri">@color/grey_800</color>
+    <color name="text_pri">@color/blue_grey_800</color>
+    <color name="text_sec">@color/grey_500</color>
 
     <color name="btn_background_not_enabled">@color/grey_600</color>
 

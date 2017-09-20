@@ -8,7 +8,7 @@ public enum Menu {
 			Convention.TIME_IN.getName()
 	),
 	BREAKS(
-			R.drawable.ic_menu_breaks,
+			R.string.fa_coffee,
 			"Breaks"
 	),
 	STORES(
@@ -16,23 +16,23 @@ public enum Menu {
 			Convention.STORES.getName()
 	),
 	UPDATE_MASTER_FILE(
-			R.drawable.ic_menu_update_master_file,
+			R.string.fa_refresh,
 			"Update Master File"
 	),
 	SEND_BACK_UP(
-			R.drawable.ic_menu_send_back_up,
+			R.string.fa_upload,
 			"Send Back-up Data"
 	),
 	BACK_UP(
-			R.drawable.ic_menu_back_up,
+			R.string.fa_download,
 			"Back-up Data"
 	),
 	ABOUT(
-			R.drawable.ic_menu_about,
+			R.string.fa_info_circle,
 			"About"
 	),
 	LOGOUT(
-			R.drawable.ic_menu_logout,
+			R.string.fa_power_off,
 			"Log-out"
 	);
 	int icon;

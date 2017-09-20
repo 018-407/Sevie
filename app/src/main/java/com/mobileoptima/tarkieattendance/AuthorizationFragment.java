@@ -17,19 +17,19 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.TextView;
 
 import com.android.library.Sqlite.SQLiteAdapter;
 import com.android.library.Utils.Device;
 import com.android.library.Utils.UI;
+import com.android.library.widgets.CustomEditText;
 import com.mobileoptima.constants.Action;
 import com.mobileoptima.data.Get;
 import com.mobileoptima.interfaces.Callback.OnBackPressedCallback;
 import com.mobileoptima.interfaces.Callback.OnRefreshCallback;
 
 public class AuthorizationFragment extends Fragment implements OnBackPressedCallback, OnRefreshCallback, OnClickListener {
-	private EditText etDeviceCodeAuthorization;
+	private CustomEditText etDeviceCodeAuthorization;
 	private FragmentManager manager;
 	private MainActivity main;
 	private OnRefreshCallback refreshCallback;

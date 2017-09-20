@@ -9,8 +9,8 @@ import android.view.View;
 import android.widget.HorizontalScrollView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.TextView;
 
+import com.android.library.widgets.CustomTextView;
 import com.android.library.widgets.ViewPagerAdapter;
 import com.mobileoptima.tarkieattendance.R;
 
@@ -61,7 +61,7 @@ public class PageSlidingTab extends HorizontalScrollView {
 				for(int x = 0; x < adapter.getCount(); x++) {
 					final int position = x;
 					View tabItem = LayoutInflater.from(context).inflate(R.layout.page_sliding_tab_item, container, false);
-					TextView tvTitlePageSlidingTab = tabItem.findViewById(R.id.tvTitlePageSlidingTab);
+					CustomTextView tvTitlePageSlidingTab = tabItem.findViewById(R.id.tvTitlePageSlidingTab);
 					ImageView ivIndicatorPageSlidingTab = tabItem.findViewById(R.id.ivIndicatorPageSlidingTab);
 					tabItem.getLayoutParams().width = context.getResources().getDisplayMetrics().widthPixels / maxScrollItems;
 					tabItem.setOnClickListener(new OnClickListener() {

@@ -13,13 +13,13 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.android.library.Sqlite.SQLiteAdapter;
 import com.android.library.Utils.UI;
+import com.android.library.widgets.CustomEditText;
 import com.mobileoptima.constants.Action;
 import com.mobileoptima.data.Get;
 import com.mobileoptima.interfaces.Callback.OnBackPressedCallback;
@@ -28,7 +28,7 @@ import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
 public class LoginFragment extends Fragment implements OnBackPressedCallback, OnRefreshCallback, OnClickListener {
-	private EditText etUsernameLogin, etPasswordLogin;
+	private CustomEditText etUsernameLogin, etPasswordLogin;
 	private FragmentManager manager;
 	private MainActivity main;
 	private OnRefreshCallback refreshCallback;
