@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/white"
@@ -13,5 +14,264 @@
         android:scaleType="centerCrop"
         android:src="@drawable/ic_bg_pri"/>
 
+    <ScrollView
+        android:id="@+id/svContentHome"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scrollbarSize="@dimen/three"
+        android:scrollbarThumbVertical="@color/black_trans_thirty">
+
+        <LinearLayout
+            android:id="@+id/llContentHome"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:padding="@dimen/sixteen">
+
+            <ImageView
+                android:id="@+id/ivLogoHome"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/sixty_four"
+                android:adjustViewBounds="true"
+                android:scaleType="centerInside"/>
+
+            <RelativeLayout
+                android:id="@+id/rlAttendanceHome"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="@dimen/sixteen"
+                android:background="@drawable/bg_rect_white_trans_sixty_rad_ten"
+                android:padding="@dimen/sixteen"
+                android:visibility="gone">
+
+                <com.android.library.widgets.CustomTextView
+                    android:id="@+id/tvTimeHome"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="@dimen/negative_sixteen"
+                    android:text="00:00"
+                    android:textColor="@color/text_pri"
+                    android:textSize="@dimen/ninety_two"
+                    app:typeface="@string/proxima_nova_light"/>
+
+                <com.android.library.widgets.CustomTextView
+                    android:id="@+id/tvAmPmHome"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginTop="@dimen/sixteen"
+                    android:text="AM"
+                    android:textColor="@color/text_pri"
+                    android:textSize="@dimen/twenty"
+                    app:typeface="@string/proxima_nova_light"/>
+
+                <com.android.library.widgets.CustomTextView
+                    android:id="@+id/tvDateHome"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/tvTimeHome"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="@dimen/negative_sixteen"
+                    android:text="Monday Jan 1, 2017"
+                    android:textColor="@color/text_pri"
+                    android:textSize="@dimen/twenty"
+                    app:typeface="@string/proxima_nova_light"/>
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/tvDateHome"
+                    android:layout_marginTop="@dimen/sixteen"
+                    android:background="@drawable/edit_text">
+
+                    <com.android.library.widgets.CustomButton
+                        android:id="@+id/btnStoreHome"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/state_rect_black_trans_ten_rad_five"
+                        android:maxLines="1"
+                        android:minHeight="0dp"
+                        android:minWidth="0dp"
+                        android:paddingBottom="@dimen/et_padding"
+                        android:paddingEnd="@dimen/forty_four"
+                        android:paddingLeft="@dimen/et_padding"
+                        android:paddingRight="@dimen/forty_four"
+                        android:paddingStart="@dimen/et_padding"
+                        android:paddingTop="@dimen/et_padding"
+                        android:singleLine="true"
+                        android:textColor="@color/text_sec"
+                        android:textSize="@dimen/et_size"
+                        app:typeface="@string/proxima_nova_light"/>
+
+                    <com.android.library.widgets.CustomTextView
+                        android:layout_width="@dimen/thirty_six"
+                        android:layout_height="@dimen/thirty_six"
+                        android:layout_alignParentEnd="true"
+                        android:layout_alignParentRight="true"
+                        android:gravity="center"
+                        android:text="@string/fa_pencil"
+                        android:textColor="@color/text_sec"
+                        android:textSize="@dimen/et_size"
+                        app:typeface="@string/fontawesome"/>
+
+                </RelativeLayout>
+
+            </RelativeLayout>
+
+            <com.android.library.widgets.CustomButton
+                android:id="@+id/btnTimeInOutHome"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginEnd="@dimen/sixty_four"
+                android:layout_marginLeft="@dimen/sixty_four"
+                android:layout_marginRight="@dimen/sixty_four"
+                android:layout_marginStart="@dimen/sixty_four"
+                android:layout_marginTop="@dimen/sixteen"
+                android:background="@drawable/button_theme_pri_rad_fifty"
+                android:gravity="center"
+                android:minHeight="0dp"
+                android:minWidth="@dimen/one_hundred_fifty"
+                android:padding="@dimen/twelve"
+                android:text="Time In"
+                android:textAllCaps="true"
+                android:textColor="@color/white"
+                android:textSize="@dimen/twenty_six"
+                android:visibility="gone"
+                app:typeface="@string/proxima_nova_semi_bold"/>
+
+            <LinearLayout
+                android:id="@+id/llVisitsHome"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/sixteen"
+                android:background="@drawable/bg_rect_white_rad_five"
+                android:minHeight="@dimen/ninety_two"
+                android:orientation="vertical"
+                android:visibility="gone">
+
+                <com.android.library.widgets.CustomTextView
+                    android:id="@+id/tvVisitsTitleHome"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/bg_rect_theme_pri_top_rad_five"
+                    android:gravity="center"
+                    android:padding="@dimen/twelve"
+                    android:text="Today's Schedule"
+                    android:textAllCaps="true"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/eighteen"
+                    app:typeface="@string/proxima_nova_semi_bold"/>
+
+                <LinearLayout
+                    android:id="@+id/llTodayVisitsHome"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"/>
+
+                <com.android.library.widgets.CustomButton
+                    android:id="@+id/btnNewVisitsHome"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_margin="@dimen/sixteen"
+                    android:background="@drawable/button_sec"
+                    android:gravity="center"
+                    android:minHeight="0dp"
+                    android:minWidth="@dimen/one_hundred_fifty"
+                    android:padding="@dimen/btn_padding"
+                    android:text="New Visits"
+                    android:textColor="@color/btn_text_sec"
+                    android:textSize="@dimen/btn_size"
+                    app:typeface="@string/proxima_nova_semi_bold"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/llFormsHome"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/sixteen"
+                android:background="@drawable/bg_rect_white_rad_five"
+                android:minHeight="@dimen/ninety_two"
+                android:orientation="vertical"
+                android:visibility="gone">
+
+                <com.android.library.widgets.CustomTextView
+                    android:id="@+id/tvFormsTitleHome"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/bg_rect_theme_pri_top_rad_five"
+                    android:gravity="center"
+                    android:padding="@dimen/twelve"
+                    android:text="App Forms"
+                    android:textAllCaps="true"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/eighteen"
+                    app:typeface="@string/proxima_nova_semi_bold"/>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/llInventoryHome"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/sixteen"
+                android:background="@drawable/bg_rect_white_rad_five"
+                android:minHeight="@dimen/ninety_two"
+                android:orientation="vertical"
+                android:visibility="gone">
+
+                <com.android.library.widgets.CustomTextView
+                    android:id="@+id/tvInventoryTitleHome"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/bg_rect_theme_pri_top_rad_five"
+                    android:gravity="center"
+                    android:padding="@dimen/twelve"
+                    android:text="Inventory"
+                    android:textAllCaps="true"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/eighteen"
+                    app:typeface="@string/proxima_nova_semi_bold"/>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"/>
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </ScrollView>
+
+    <com.android.library.widgets.CustomButton
+        android:id="@+id/btnAddExpenseHome"
+        android:layout_width="@dimen/fifty_six"
+        android:layout_height="@dimen/fifty_six"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_margin="@dimen/sixteen"
+        android:background="@drawable/button_oval_amber_a400"
+        android:gravity="center"
+        android:minHeight="0dp"
+        android:minWidth="0dp"
+        android:text="@string/fa_usd"
+        android:textColor="@color/text_pri"
+        android:textSize="@dimen/thirty_six"
+        android:visibility="gone"
+        app:typeface="@string/fontawesome"/>
 
 </RelativeLayout>

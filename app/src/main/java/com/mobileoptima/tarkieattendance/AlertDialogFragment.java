@@ -79,7 +79,9 @@ public class AlertDialogFragment extends Fragment implements OnBackPressedCallba
 	@Override
 	public void onDestroy() {
 		super.onDestroy();
-		refreshCallback.onRefresh();
+		if(refreshCallback != null) {
+			refreshCallback.onRefresh();
+		}
 	}
 
 	@Override

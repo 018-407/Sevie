@@ -5,7 +5,7 @@ public class Expense extends Transaction {
 	public String origin;
 	public String destination;
 	public Store store;
-	public ExpenseType type;
+	public MasterExpenseType type;
 	public boolean isReimbursable, isUpdate, isSubmit;
 	public float amount;
 }

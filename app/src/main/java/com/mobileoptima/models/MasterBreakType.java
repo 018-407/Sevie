@@ -1,7 +1,7 @@
 package com.mobileoptima.models;
 
-public class Store {
+public class MasterBreakType {
 	public String ID;
 	public String name;
-	public String address;
+	public int duration;
 }

@@ -9,6 +9,10 @@ public enum Action {
 			"Login",
 			"Validating Account"
 	),
+	VALIDATE_TIME(
+			"Validate Time",
+			"Validating Time"
+	),
 	UPDATE_MASTER_FILE(
 			"Update Master File",
 			"Updating Master File"

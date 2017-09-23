@@ -1,6 +1,7 @@
 package com.mobileoptima.widgets;
 
 import android.content.Context;
+import android.graphics.Typeface;
 import android.support.v4.view.ViewPager;
 import android.support.v4.view.ViewPager.OnPageChangeListener;
 import android.util.AttributeSet;
@@ -10,6 +11,7 @@ import android.widget.HorizontalScrollView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 
+import com.android.library.Utils.Cache;
 import com.android.library.widgets.CustomTextView;
 import com.android.library.widgets.ViewPagerAdapter;
 import com.mobileoptima.tarkieattendance.R;
@@ -18,20 +20,21 @@ public class PageSlidingTab extends HorizontalScrollView {
 	private Context context;
 	private ViewPager viewPager;
 	private int maxScrollItems = 2;
+	private Typeface light, semiBold;
 
 	public PageSlidingTab(Context context) {
-		super(context);
-		this.context = context;
+		this(context, null);
 	}
 
 	public PageSlidingTab(Context context, AttributeSet attrs) {
-		super(context, attrs);
-		this.context = context;
+		this(context, attrs, android.R.attr.horizontalScrollViewStyle);
 	}
 
 	public PageSlidingTab(Context context, AttributeSet attrs, int defStyleAttr) {
 		super(context, attrs, defStyleAttr);
 		this.context = context;
+		light = Cache.getTypeface(context.getAssets(), context.getString(R.string.proxima_nova_light));
+		semiBold = Cache.getTypeface(context.getAssets(), context.getString(R.string.proxima_nova_semi_bold));
 	}
 
 	public void setViewPager(ViewPager viewPager) {
@@ -78,6 +81,7 @@ public class PageSlidingTab extends HorizontalScrollView {
 						tvTitlePageSlidingTab.setVisibility(GONE);
 					}
 					if(x == 0) {
+						tvTitlePageSlidingTab.setTypeface(semiBold);
 						ivIndicatorPageSlidingTab.setVisibility(VISIBLE);
 					}
 					container.addView(tabItem);
@@ -91,6 +95,7 @@ public class PageSlidingTab extends HorizontalScrollView {
 						@Override
 						public void onPageSelected(int position) {
 							for(int x = 0; x < container.getChildCount(); x++) {
+								((CustomTextView) container.getChildAt(x).findViewById(R.id.tvTitlePageSlidingTab)).setTypeface(position == x ? semiBold : light);
 								container.getChildAt(x).findViewById(R.id.ivIndicatorPageSlidingTab).setVisibility(position == x ? VISIBLE : INVISIBLE);
 							}
 							container.requestChildFocus(container.getChildAt(position), container.getChildAt(position));

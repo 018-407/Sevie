@@ -1,5 +1,6 @@
 package com.mobileoptima.models;
 
-public class Team {
+public class MasterAlertType {
 	public String ID;
+	public String name;
 }

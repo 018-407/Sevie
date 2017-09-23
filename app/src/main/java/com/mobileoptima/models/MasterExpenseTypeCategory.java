@@ -1,7 +1,6 @@
 package com.mobileoptima.models;
 
-public class Store {
+public class MasterExpenseTypeCategory {
 	public String ID;
 	public String name;
-	public String address;
 }

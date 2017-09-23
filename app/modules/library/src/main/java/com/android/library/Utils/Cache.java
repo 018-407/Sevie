@@ -1,6 +1,7 @@
 package com.android.library.Utils;
 
 import android.content.Context;
+import android.content.res.AssetManager;
 import android.graphics.Typeface;
 
 import com.android.library.Sqlite.SQLiteAdapter;
@@ -40,10 +41,10 @@ public class Cache {
 		return SQLITE_ADAPTER.get(database);
 	}
 
-	public static Typeface getTypeface(Context context, String typeface) {
+	public static Typeface getTypeface(AssetManager manager, String typeface) {
 		synchronized(TYPEFACE) {
 			if(!TYPEFACE.containsKey(typeface)) {
-				TYPEFACE.put(typeface, Typeface.createFromAsset(context.getAssets(), typeface));
+				TYPEFACE.put(typeface, Typeface.createFromAsset(manager, typeface));
 			}
 		}
 		return TYPEFACE.get(typeface);

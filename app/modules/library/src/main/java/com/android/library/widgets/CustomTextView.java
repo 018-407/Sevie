@@ -13,7 +13,7 @@ public class CustomTextView extends android.support.v7.widget.AppCompatTextView 
 	}
 
 	public CustomTextView(Context context, AttributeSet attrs) {
-		this(context, attrs, 0);
+		this(context, attrs, android.R.attr.textViewStyle);
 	}
 
 	public CustomTextView(Context context, AttributeSet attrs, int defStyleAttr) {
@@ -25,7 +25,7 @@ public class CustomTextView extends android.support.v7.widget.AppCompatTextView 
 		if(typedArray != null) {
 			String fontFamily = typedArray.getString(R.styleable.app_typeface);
 			if(fontFamily != null && !fontFamily.isEmpty()) {
-				setTypeface(Cache.getTypeface(context, fontFamily));
+				setTypeface(Cache.getTypeface(context.getAssets(), fontFamily));
 			}
 		}
 	}

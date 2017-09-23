@@ -38,11 +38,11 @@
                 style="?android:attr/progressBarStyleHorizontal"
                 android:layout_width="@dimen/pb_dimen"
                 android:layout_height="@dimen/pb_dimen"
-                android:background="@drawable/pb_background"
+                android:background="@drawable/progress_bar_background"
                 android:indeterminate="false"
                 android:max="100"
                 android:progress="0"
-                android:progressDrawable="@drawable/pb_progress"
+                android:progressDrawable="@drawable/progress_bar_progress"
                 android:rotation="270"/>
 
             <com.android.library.widgets.CustomTextView

@@ -12,14 +12,11 @@ public class ViewPagerAdapter extends FragmentStatePagerAdapter {
 	private ArrayList<Integer> tabIcons;
 
 	public ViewPagerAdapter(FragmentManager manager, ArrayList<Fragment> fragments) {
-		super(manager);
-		this.fragments = fragments;
+		this(manager, fragments, null);
 	}
 
 	public ViewPagerAdapter(FragmentManager manager, ArrayList<Fragment> fragments, ArrayList<String> tabTitles) {
-		super(manager);
-		this.fragments = fragments;
-		this.tabTitles = tabTitles;
+		this(manager, fragments, tabTitles, null);
 	}
 
 	public ViewPagerAdapter(FragmentManager manager, ArrayList<Fragment> fragments, ArrayList<String> tabTitles, ArrayList<Integer> tabIcons) {

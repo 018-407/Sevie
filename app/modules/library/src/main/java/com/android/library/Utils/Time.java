@@ -3,6 +3,7 @@ package com.android.library.Utils;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Locale;
+import java.util.TimeZone;
 
 public class Time {
 	private static final Locale locale = Locale.ENGLISH;
@@ -59,6 +60,33 @@ public class Time {
 
 	public static String getTimestamp() {
 		return convertMilliToTimestamp(System.currentTimeMillis());
+	}
+
+	public static long getTimestampFromTimeZoneID(long milli, String timeZoneID) {
+		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", locale);
+		format.setTimeZone(TimeZone.getTimeZone(timeZoneID));
+		return convertTimestampToMilli(format.format(milli));
+	}
+
+	public static String getTimeZoneID(String dateTime, long milli) {
+		String timeZoneID = null;
+		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm", locale);
+		format.setTimeZone(TimeZone.getTimeZone(TimeZone.getDefault().getID()));
+		String timestampFromTimeZone = format.format(milli);
+		dateTime = dateTime.substring(0, dateTime.length() - 2);
+		if(timestampFromTimeZone.equals(dateTime)) {
+			timeZoneID = TimeZone.getDefault().getID();
+		}
+		for(String availableTimeZoneID : TimeZone.getAvailableIDs()) {
+			format = new SimpleDateFormat("yyyy-MM-dd HH:mm", locale);
+			format.setTimeZone(TimeZone.getTimeZone(availableTimeZoneID));
+			timestampFromTimeZone = format.format(milli);
+			if(timestampFromTimeZone.equals(dateTime)) {
+				timeZoneID = availableTimeZoneID;
+				break;
+			}
+		}
+		return timeZoneID;
 	}
 
 	public static String getDateFromTimestamp(String timestamp) {

@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/state_rect_black_trans_thirty"
+    android:orientation="horizontal">
+
+    <LinearLayout
+        android:id="@+id/llTodayVisit"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_toStartOf="@+id/tvRightTodayVisit"
+        android:padding="@dimen/eight"
+        android:layout_toLeftOf="@+id/tvRightTodayVisit"
+        android:orientation="vertical">
+
+        <com.android.library.widgets.CustomTextView
+            android:id="@+id/tvNameTodayVisit"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/text_pri"
+            android:textSize="@dimen/sixteen"
+            app:typeface="@string/proxima_nova_semi_bold"/>
+
+        <com.android.library.widgets.CustomTextView
+            android:id="@+id/tvAddressTodayVisit"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/text_pri"
+            android:textSize="@dimen/sixteen"
+            app:typeface="@string/proxima_nova_light"/>
+
+    </LinearLayout>
+
+    <com.android.library.widgets.CustomTextView
+        android:id="@+id/tvRightTodayVisit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:padding="@dimen/sixteen"
+        android:text="@string/fa_angle_right"
+        android:textColor="@color/text_pri"
+        android:textSize="@dimen/sixteen"
+        app:typeface="@string/fontawesome"/>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/divider"
+        android:layout_alignParentBottom="true"
+        android:background="@color/divider"/>
+
+</RelativeLayout>

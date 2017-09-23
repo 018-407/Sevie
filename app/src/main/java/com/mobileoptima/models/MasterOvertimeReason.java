@@ -1,6 +1,6 @@
 package com.mobileoptima.models;
 
-public class ExpenseTypeCategory {
+public class MasterOvertimeReason {
 	public String ID;
 	public String name;
 }

@@ -50,11 +50,14 @@ public class LoadingDialogFragment extends Fragment implements OnBackPressedCall
 					progress = 0;
 					switch(action) {
 						case AUTHORIZE_DEVICE:
-							max = 3;
+							max = 4;
 							result = Tx.authorizeDevice(db, bundle.getString("DEVICE_CODE"), bundle.getString("DEVICE_ID"), LoadingDialogFragment.this);
 							Thread.sleep(250);
 							handler.sendMessage(handler.obtainMessage());
 							if(result) {
+//								Rx.serverTime(db, LoadingDialogFragment.this);
+//								Thread.sleep(250);
+								handler.sendMessage(handler.obtainMessage());
 								Rx.company(db, LoadingDialogFragment.this);
 								Thread.sleep(250);
 								handler.sendMessage(handler.obtainMessage());
@@ -74,11 +77,22 @@ public class LoadingDialogFragment extends Fragment implements OnBackPressedCall
 								handler.sendMessage(handler.obtainMessage());
 							}
 							break;
-						case UPDATE_MASTER_FILE:
-							max = 3;
-							result = Rx.company(db, LoadingDialogFragment.this);
+						case VALIDATE_TIME:
+							max = 1;
+							result = Rx.serverTime(db, LoadingDialogFragment.this);
 							Thread.sleep(250);
 							handler.sendMessage(handler.obtainMessage());
+							break;
+						case UPDATE_MASTER_FILE:
+							max = 9;
+							result = Rx.syncBatchID(db, LoadingDialogFragment.this);
+							Thread.sleep(250);
+							handler.sendMessage(handler.obtainMessage());
+							if(result) {
+								result = Rx.company(db, LoadingDialogFragment.this);
+								Thread.sleep(250);
+								handler.sendMessage(handler.obtainMessage());
+							}
 							if(result) {
 								result = Rx.convention(db, LoadingDialogFragment.this);
 								Thread.sleep(250);
@@ -86,6 +100,31 @@ public class LoadingDialogFragment extends Fragment implements OnBackPressedCall
 							}
 							if(result) {
 								result = Rx.employees(db, LoadingDialogFragment.this);
+								Thread.sleep(250);
+								handler.sendMessage(handler.obtainMessage());
+							}
+							if(result) {
+								result = Rx.alertTypes(db, LoadingDialogFragment.this);
+								Thread.sleep(250);
+								handler.sendMessage(handler.obtainMessage());
+							}
+							if(result) {
+								result = Rx.breakTypes(db, LoadingDialogFragment.this);
+								Thread.sleep(250);
+								handler.sendMessage(handler.obtainMessage());
+							}
+							if(result) {
+								result = Rx.expenseTypeCategories(db, LoadingDialogFragment.this);
+								Thread.sleep(250);
+								handler.sendMessage(handler.obtainMessage());
+							}
+							if(result) {
+								result = Rx.scheduleTimes(db, LoadingDialogFragment.this);
+								Thread.sleep(250);
+								handler.sendMessage(handler.obtainMessage());
+							}
+							if(result) {
+								result = Rx.overtimeReasons(db, LoadingDialogFragment.this);
 								Thread.sleep(250);
 								handler.sendMessage(handler.obtainMessage());
 							}

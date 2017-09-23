@@ -45,7 +45,7 @@
         android:textSize="@dimen/sixteen"
         app:typeface="@string/proxima_nova_light"/>
 
-    <ImageView
+    <View
         android:layout_width="match_parent"
         android:layout_height="@dimen/divider"
         android:layout_alignParentBottom="true"

@@ -80,7 +80,7 @@ public class AuthorizationFragment extends Fragment implements OnBackPressedCall
 
 	@Override
 	public void onBackPressed() {
-		main.finish();
+		main.moveTaskToBack(true);
 	}
 
 	@Override
@@ -106,7 +106,7 @@ public class AuthorizationFragment extends Fragment implements OnBackPressedCall
 				alert.setOnBackPressedCallback(new OnBackPressedCallback() {
 					@Override
 					public void onBackPressed() {
-						main.finish();
+						main.moveTaskToBack(true);
 					}
 				});
 				alert.setOnRefreshCallback(this);
@@ -124,7 +124,7 @@ public class AuthorizationFragment extends Fragment implements OnBackPressedCall
 				alert.setNegativeButton("Cancel", new View.OnClickListener() {
 					@Override
 					public void onClick(View view) {
-						main.finish();
+						main.moveTaskToBack(true);
 					}
 				});
 				UI.addFragment(manager, R.id.rlMain, alert);

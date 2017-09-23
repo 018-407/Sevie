@@ -1,6 +1,6 @@
 package com.mobileoptima.models;
 
-public class Employee {
+public class MasterEmployee {
 	public String ID;
 	public String firstName;
 	public String lastName;
@@ -8,6 +8,6 @@ public class Employee {
 	public String email;
 	public String mobile;
 	public String photoURL;
-	public Team team;
+	public String teamID;
 	public boolean isApprover;
 }

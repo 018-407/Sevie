@@ -21,13 +21,11 @@ public class ModulesSlidingTab extends HorizontalScrollView {
 	private int maxScrollItems = 6;
 
 	public ModulesSlidingTab(Context context) {
-		super(context);
-		this.context = context;
+		this(context, null);
 	}
 
 	public ModulesSlidingTab(Context context, AttributeSet attrs) {
-		super(context, attrs);
-		this.context = context;
+		this(context, attrs, android.R.attr.horizontalScrollViewStyle);
 	}
 
 	public ModulesSlidingTab(Context context, AttributeSet attrs, int defStyleAttr) {

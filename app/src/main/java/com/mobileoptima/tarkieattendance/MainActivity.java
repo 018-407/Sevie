@@ -1,5 +1,6 @@
 package com.mobileoptima.tarkieattendance;
 
+import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
@@ -21,6 +22,7 @@ import android.widget.LinearLayout;
 
 import com.android.library.Sqlite.SQLiteAdapter;
 import com.android.library.Utils.Cache;
+import com.android.library.Utils.Time;
 import com.android.library.Utils.UI;
 import com.android.library.widgets.CustomTextView;
 import com.android.library.widgets.ViewPagerAdapter;
@@ -29,6 +31,7 @@ import com.mobileoptima.constants.App;
 import com.mobileoptima.constants.Convention;
 import com.mobileoptima.constants.Menu;
 import com.mobileoptima.constants.Modules;
+import com.mobileoptima.constants.Settings;
 import com.mobileoptima.data.Get;
 import com.mobileoptima.data.Save;
 import com.mobileoptima.interfaces.Callback.OnBackPressedCallback;
@@ -59,7 +62,7 @@ public class MainActivity extends AppCompatActivity implements OnRefreshCallback
 	private ViewPager vpMain;
 	private ViewPagerAdapter vpAdapter;
 	private Window window;
-	private boolean isSaveInstanceState, isRefresh;
+	private boolean isSaveInstanceState, isRefresh, showTimeSecurityAlertDialog;
 
 	@Override
 	protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -109,6 +112,7 @@ public class MainActivity extends AppCompatActivity implements OnRefreshCallback
 			isRefresh = false;
 			onRefresh();
 		}
+		validateTime();
 	}
 
 	@Override
@@ -143,6 +147,7 @@ public class MainActivity extends AppCompatActivity implements OnRefreshCallback
 			LoginFragment login = new LoginFragment();
 			login.setOnRefreshCallback(this);
 			UI.addFragment(manager, R.id.rlMain, login, 0, 0, 0, R.anim.fade_out);
+			validateTime();
 			return;
 		}
 		dlMain.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
@@ -169,7 +174,7 @@ public class MainActivity extends AppCompatActivity implements OnRefreshCallback
 			Menu.TIME_IN_OUT.setName(Convention.TIME_IN.getName());
 		}
 		for(Menu menu : Menu.values()) {
-			updateMenuItem(llMenuItemsDrawerMain, menu);
+			updateMenuItems(llMenuItemsDrawerMain, menu);
 		}
 		vpFragments.clear();
 		vpTabTitles.clear();
@@ -178,7 +183,9 @@ public class MainActivity extends AppCompatActivity implements OnRefreshCallback
 		vpTabTitles.add("Home");
 		vpTabIcons.add(R.string.fa_home);
 		for(Modules module : Modules.values()) {
-			if(Get.isModuleEnabled(db, module.getID())) {
+			boolean isEnabled = Get.isModuleEnabled(db, module.getID());
+			module.setEnabled(isEnabled);
+			if(isEnabled) {
 				vpFragments.add(module.getFragment());
 				vpTabTitles.add(module.getName());
 				vpTabIcons.add(module.getIcon());
@@ -208,6 +215,7 @@ public class MainActivity extends AppCompatActivity implements OnRefreshCallback
 		this.db = db;
 		this.imageLoader = imageLoader;
 		onRefresh();
+		validateTime();
 	}
 
 	@Override
@@ -217,6 +225,10 @@ public class MainActivity extends AppCompatActivity implements OnRefreshCallback
 		}
 		if(backPressedCallback != null) {
 			backPressedCallback.onBackPressed();
+			return;
+		}
+		if(manager.getBackStackEntryCount() == 0) {
+			moveTaskToBack(true);
 			return;
 		}
 		super.onBackPressed();
@@ -230,6 +242,10 @@ public class MainActivity extends AppCompatActivity implements OnRefreshCallback
 				UI.openDrawer(dlMain);
 				break;
 			case 1://TIME_IN_OUT
+				if(Menu.TIME_IN_OUT.getName().equals(Convention.TIME_IN.getName())) {
+				}
+				else {
+				}
 				break;
 			case 2://BREAKS
 				break;
@@ -294,11 +310,11 @@ public class MainActivity extends AppCompatActivity implements OnRefreshCallback
 		this.backPressedCallback = backPressedCallback;
 	}
 
-	public void updateMenuItem(LinearLayout container, Menu menu) {
+	public void updateMenuItems(LinearLayout container, Menu menu) {
 		int index = menu.ordinal() + 1;
 		View menuItem = container.getChildAt(index);
 		if(menuItem == null) {
-			menuItem = LayoutInflater.from(this).inflate(R.layout.menu_list_row, container, false);
+			menuItem = LayoutInflater.from(this).inflate(R.layout.menu_list_item, container, false);
 			menuItem.setId(index);
 			container.addView(menuItem, index);
 		}
@@ -320,5 +336,52 @@ public class MainActivity extends AppCompatActivity implements OnRefreshCallback
 		}
 		((CustomTextView) menuItem.findViewById(R.id.tvTextMenu)).setText(menu.getName());
 		menuItem.setOnClickListener(this);
+	}
+
+	public void validateTime() {
+		if(db == null) {
+			return;
+		}
+		String apiKey = Get.apiKey(db);
+		if(apiKey == null || apiKey.isEmpty()) {
+			return;
+		}
+		if(showTimeSecurityAlertDialog) {
+			showTimeSecurityAlertDialog = false;
+			manager.popBackStack();
+		}
+		long serverTimestamp = Get.serverTimestamp(db);
+		long timestamp = System.currentTimeMillis();
+		if(serverTimestamp == 0 || !(serverTimestamp >= (timestamp - Settings.TIME_SECURITY_ALLOWANCE) && serverTimestamp <= (timestamp + Settings.TIME_SECURITY_ALLOWANCE))) {
+			showTimeSecurityAlertDialog = true;
+			final AlertDialogFragment alert = new AlertDialogFragment();
+			alert.setOnBackPressedCallback(new OnBackPressedCallback() {
+				@Override
+				public void onBackPressed() {
+					moveTaskToBack(true);
+				}
+			});
+			alert.setTitle("Date & Time Security");
+			alert.setMessage("We have detected a discrepancy between server and your device time.\n\nServer Time:\n" + (serverTimestamp != 0 ? Time.formatDateTime(Time.convertMilliToTimestamp(serverTimestamp), "yyyy-MM-dd HH:mm:ss", "MMMM d, yyyy hh:mm a") : "N/A") + "\n\nPlease change the device time to \"Server Time\" to continue.");
+			alert.setPositiveButton("Validate", new View.OnClickListener() {
+				@Override
+				public void onClick(View view) {
+					manager.popBackStack();
+					LoadingDialogFragment updateMasterFile = new LoadingDialogFragment();
+					updateMasterFile.setOnRefreshCallback(MainActivity.this);
+					updateMasterFile.setAction(Action.VALIDATE_TIME);
+					UI.addFragment(manager, R.id.rlMain, updateMasterFile);
+				}
+			});
+			alert.setNegativeButton("Settings", new View.OnClickListener() {
+				@Override
+				public void onClick(View view) {
+					Intent intent = new Intent();
+					intent.setAction(android.provider.Settings.ACTION_DATE_SETTINGS);
+					startActivity(intent);
+				}
+			});
+			UI.addFragment(manager, R.id.rlMain, alert);
+		}
 	}
 }

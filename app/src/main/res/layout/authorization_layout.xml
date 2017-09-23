@@ -42,7 +42,7 @@
             android:id="@+id/etDeviceCodeAuthorization"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@drawable/bg_edit_text"
+            android:background="@drawable/edit_text"
             android:gravity="center"
             android:hint="@string/authorization_device_code_hint"
             android:imeOptions="actionDone"
@@ -58,13 +58,15 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/sixteen"
-            android:background="@drawable/bg_button_pri"
+            android:background="@drawable/button_pri"
+            android:gravity="center"
             android:minHeight="0dp"
             android:minWidth="@dimen/one_hundred_fifty"
             android:padding="@dimen/btn_padding"
             android:text="@string/authorization_button"
             android:textColor="@color/btn_text_pri"
-            android:textSize="@dimen/btn_size"/>
+            android:textSize="@dimen/btn_size"
+            app:typeface="@string/proxima_nova_semi_bold"/>
 
     </LinearLayout>
 

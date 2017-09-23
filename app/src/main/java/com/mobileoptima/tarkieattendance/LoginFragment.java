@@ -29,7 +29,9 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 
 public class LoginFragment extends Fragment implements OnBackPressedCallback, OnRefreshCallback, OnClickListener {
 	private CustomEditText etUsernameLogin, etPasswordLogin;
+	private DisplayImageOptions ivLogoLoginOptions;
 	private FragmentManager manager;
+	private ImageLoader imageLoader;
 	private MainActivity main;
 	private OnRefreshCallback refreshCallback;
 	private SQLiteAdapter db;
@@ -43,6 +45,13 @@ public class LoginFragment extends Fragment implements OnBackPressedCallback, On
 		manager = main.getSupportFragmentManager();
 		window = main.getWindow();
 		db = main.getSQLiteAdapater();
+		imageLoader = main.getImageLoader();
+		ivLogoLoginOptions = new DisplayImageOptions.Builder()
+				.showImageForEmptyUri(R.drawable.ic_logo)
+				.showImageOnFail(R.drawable.ic_logo)
+				.cacheInMemory(true)
+				.cacheOnDisk(true)
+				.build();
 	}
 
 	@Nullable
@@ -64,13 +73,6 @@ public class LoginFragment extends Fragment implements OnBackPressedCallback, On
 			layoutParams.setMargins(0, 0, 0, res.getDimensionPixelSize(navHeightID) + res.getDimensionPixelOffset(R.dimen.sixteen));
 			ivPoweredByLogin.setLayoutParams(layoutParams);
 		}
-		ImageLoader imageLoader = main.getImageLoader();
-		DisplayImageOptions ivLogoLoginOptions = new DisplayImageOptions.Builder()
-				.showImageForEmptyUri(R.drawable.ic_logo)
-				.showImageOnFail(R.drawable.ic_logo)
-				.cacheInMemory(true)
-				.cacheOnDisk(true)
-				.build();
 		imageLoader.displayImage(Get.companyLogo(db), ivLogoLogin, ivLogoLoginOptions);
 		etPasswordLogin.setOnEditorActionListener(new TextView.OnEditorActionListener() {
 			@Override
@@ -100,7 +102,7 @@ public class LoginFragment extends Fragment implements OnBackPressedCallback, On
 
 	@Override
 	public void onBackPressed() {
-		main.finish();
+		main.moveTaskToBack(true);
 	}
 
 	@Override

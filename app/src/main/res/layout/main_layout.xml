@@ -44,6 +44,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Menu"
+                    android:textAllCaps="true"
                     android:textColor="@color/white"
                     android:textSize="@dimen/sixteen"
                     app:typeface="@string/proxima_nova_light"/>
@@ -99,7 +100,8 @@
                         android:layout_marginStart="@dimen/sixteen"
                         android:text="Aug 29, 2017"
                         android:textColor="@color/white"
-                        android:textSize="@dimen/sixteen"/>
+                        android:textSize="@dimen/sixteen"
+                        app:typeface="@string/proxima_nova_light"/>
 
                     <ImageView
                         android:layout_width="@dimen/fifty_six"
@@ -120,13 +122,13 @@
             android:layout_above="@+id/stMain"
             android:layout_below="@+id/rlAppBarMain"/>
 
-        <ImageView
+        <View
             android:layout_width="match_parent"
             android:layout_height="@dimen/divider"
             android:layout_below="@+id/rlAppBarMain"
             android:background="@color/black_trans_ten"/>
 
-        <ImageView
+        <View
             android:layout_width="match_parent"
             android:layout_height="@dimen/divider"
             android:layout_above="@+id/stMain"

@@ -98,7 +98,7 @@ public class SplashFragment extends Fragment implements OnBackPressedCallback, O
 
 	@Override
 	public void onBackPressed() {
-		main.finish();
+		main.moveTaskToBack(true);
 	}
 
 	@Override
@@ -123,7 +123,7 @@ public class SplashFragment extends Fragment implements OnBackPressedCallback, O
 				alert.setOnBackPressedCallback(new OnBackPressedCallback() {
 					@Override
 					public void onBackPressed() {
-						main.finish();
+						main.moveTaskToBack(true);
 					}
 				});
 				alert.setOnRefreshCallback(this);
@@ -141,7 +141,7 @@ public class SplashFragment extends Fragment implements OnBackPressedCallback, O
 				alert.setNegativeButton("Cancel", new View.OnClickListener() {
 					@Override
 					public void onClick(View view) {
-						main.finish();
+						main.moveTaskToBack(true);
 					}
 				});
 				UI.addFragment(manager, R.id.rlMain, alert);
