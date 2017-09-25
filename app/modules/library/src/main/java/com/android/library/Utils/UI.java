@@ -44,9 +44,14 @@ public class UI {
 
 	public static void hideSystemUi(Window window, boolean fullScreen, boolean hideStatusBar, boolean hideNavigationBar, boolean immersive) {
 		View decorView = window.getDecorView();
+		window.clearFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
+		window.clearFlags(WindowManager.LayoutParams.FLAG_FORCE_NOT_FULLSCREEN);
+		if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+			window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+			window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
+		}
 		int flag = View.SYSTEM_UI_FLAG_LAYOUT_STABLE;
 		if(fullScreen) {
-			flag |= View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION;
 			if(hideStatusBar) {
 				flag |= View.SYSTEM_UI_FLAG_FULLSCREEN;
 			}
@@ -63,18 +68,15 @@ public class UI {
 					window.addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
 				}
 			}
-			if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT && hideStatusBar && hideNavigationBar && immersive) {
-				flag |= View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY;
+			if(hideStatusBar || hideNavigationBar) {
+				flag |= View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION;
+				if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT && immersive) {
+					flag |= View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY;
+				}
+				window.addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
 			}
-			window.clearFlags(WindowManager.LayoutParams.FLAG_FORCE_NOT_FULLSCREEN);
-			window.addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
 		}
 		else {
-			window.clearFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
-			if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-				window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-				window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
-			}
 			window.addFlags(WindowManager.LayoutParams.FLAG_FORCE_NOT_FULLSCREEN);
 		}
 		decorView.setSystemUiVisibility(flag);

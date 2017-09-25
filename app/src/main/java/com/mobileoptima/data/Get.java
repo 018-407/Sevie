@@ -104,10 +104,6 @@ public class Get {
 		return serverTimestamp;
 	}
 
-	public static String timeZoneID(SQLiteAdapter db) {
-		return db.getString("SELECT timeZoneID FROM " + Table.TIME_SECURITY.getName() + " WHERE ID = '1'");
-	}
-
 	public static Store store(SQLiteAdapter db, String storeID) {
 		Store store = null;
 		Cursor cursor = db.rawQuery("");

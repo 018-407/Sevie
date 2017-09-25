@@ -9,6 +9,7 @@ import com.mobileoptima.constants.Convention;
 import com.mobileoptima.constants.Modules;
 import com.mobileoptima.constants.Settings;
 import com.mobileoptima.constants.Table;
+import com.mobileoptima.models.GPS;
 import com.mobileoptima.models.MasterAlertType;
 import com.mobileoptima.models.MasterBreakType;
 import com.mobileoptima.models.MasterCompany;
@@ -17,6 +18,7 @@ import com.mobileoptima.models.MasterExpenseType;
 import com.mobileoptima.models.MasterExpenseTypeCategory;
 import com.mobileoptima.models.MasterOvertimeReason;
 import com.mobileoptima.models.MasterScheduleTime;
+import com.mobileoptima.models.Store;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -312,7 +314,14 @@ public class Rx {
 		db.beginTransaction();
 		for(int x = 0; x < dataArray.length(); x++) {
 			JSONObject dataObj = dataArray.optJSONObject(x);
-			Save.timeSecurity(db, dataObj.optString("date_time"), dataObj.optLong("timestamp") * 1000);
+			String timestamp[] = dataObj.optString("date_time").split(" ");
+			String date = timestamp[0];
+			String time[] = timestamp[1].split(":");
+			String h = time[0];
+			String m = time[1];
+			String s = time[2];
+			String dateTime = date + " " + (Integer.parseInt(h) < 10 ? "0" : "") + h + ":" + m + ":" + s;
+			Save.timeSecurity(db, dateTime, dataObj.optLong("timestamp") * 1000);
 		}
 		return db.endTransaction();
 	}
@@ -334,6 +343,78 @@ public class Rx {
 		for(int x = 0; x < dataArray.length(); x++) {
 			JSONObject dataObj = dataArray.optJSONObject(x);
 			Save.syncBatchID(db, dataObj.optString("sync_batch_id"));
+		}
+		return db.endTransaction();
+	}
+
+	public static boolean stores(SQLiteAdapter db, OnErrorCallback errorCallback) {
+		HashMap<String, Object> map = new HashMap<>();
+		map.put("api_key", Get.apiKey(db));
+		map.put("employee_id", Get.employeeID(db));
+		String url = App.WEB_API + "get-stores-for-app";
+		String params = Http.jasonObjectToURL(new JSONObject(map));
+		String response = Http.get(url, params, Settings.HTTP_REQUEST_TIMEOUT_RX);
+		Utils.log("stores", url);
+		Utils.log("stores", params);
+		Utils.log("stores", response);
+		JSONArray dataArray = Utils.getDataArray(params, response, errorCallback);
+		if(dataArray == null) {
+			return false;
+		}
+		db.beginTransaction();
+		db.rawQuery("UPDATE " + Table.BREAK_TYPES.getName() + " SET isActive = 0");
+		for(int x = 0; x < dataArray.length(); x++) {
+			JSONObject dataObj = dataArray.optJSONObject(x);
+			Store store = new Store();
+			store.syncBatchID = dataObj.optString("");
+			store.webID = dataObj.optString("store_id");
+			MasterEmployee employee = new MasterEmployee();
+			employee.ID = dataObj.optString("");
+			store.employee = employee;
+			GPS gps = new GPS();
+			gps.longitude = dataObj.optDouble("");
+			gps.latitude = dataObj.optDouble("");
+			store.gps = gps;
+			store.isFromWeb = true;
+			store.isSync = dataObj.optInt("") == 1;
+			store.batteryLevel = dataObj.optInt("");
+			store.name = dataObj.optString("store_name");
+			store.address = dataObj.optString("address");
+			store.contactNumber = dataObj.optString("contact_number");
+			int class1ID = dataObj.getInt("store_class_1_id");
+			int class2ID = dataObj.getInt("store_class_2_id");
+			int class3ID = dataObj.getInt("store_class_3_id");
+			query.clearAll();
+			query.add(new FieldValue("name", name));
+			query.add(new FieldValue("empID", empID));
+			query.add(new FieldValue("address", address));
+			query.add(new FieldValue("radius", dataObj.getInt("geo_fence_radius")));
+			query.add(new FieldValue("isActive", dataObj.getInt("is_active")));
+			query.add(new FieldValue("isWebUpdate", true));
+			query.add(new FieldValue("isSync", true));
+			query.add(new FieldValue("isTag", true));
+			if(class1ID != 0) {
+				query.add(new FieldValue("class1ID", class1ID));
+			}
+			if(class2ID != 0) {
+				query.add(new FieldValue("class2ID", class2ID));
+			}
+			if(class3ID != 0) {
+				query.add(new FieldValue("class3ID", class3ID));
+			}
+			query.add(new FieldValue("name", name));
+			query.add(new FieldValue("empID", empID));
+			query.add(new FieldValue("address", address));
+			query.add(new FieldValue("webStoreID", webStoreID));
+			query.add(new FieldValue("contactNo", dataObj.getString("contact_number")));
+			query.add(new FieldValue("gpsLongitude", dataObj.getDouble("longitude")));
+			query.add(new FieldValue("gpsLatitude", dataObj.getDouble("latitude")));
+			query.add(new FieldValue("radius", dataObj.getInt("geo_fence_radius")));
+			query.add(new FieldValue("isActive", dataObj.getInt("is_active")));
+			query.add(new FieldValue("isWebUpdate", true));
+			query.add(new FieldValue("isSync", true));
+			query.add(new FieldValue("isTag", true));
+			Save.store(db, store);
 		}
 		return db.endTransaction();
 	}

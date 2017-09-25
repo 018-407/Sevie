@@ -66,7 +66,7 @@ public class HomeFragment extends Fragment implements OnClickListener {
 		handler = new Handler(new Handler.Callback() {
 			@Override
 			public boolean handleMessage(Message message) {
-				String timestamp = Time.getTimestamp();
+				String timestamp = Time.getDeviceTimestamp();
 				tvTimeHome.setText(Time.formatDateTime(timestamp, "yyyy-MM-dd HH:mm:ss", "hh:mm"));
 				tvAmPmHome.setText(Time.formatDateTime(timestamp, "yyyy-MM-dd HH:mm:ss", "a"));
 				tvDateHome.setText(Time.formatDateTime(timestamp, "yyyy-MM-dd HH:mm:ss", "EEEE MMM d, yyyy"));

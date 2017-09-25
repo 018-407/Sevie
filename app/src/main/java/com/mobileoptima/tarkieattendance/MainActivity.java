@@ -81,11 +81,10 @@ public class MainActivity extends AppCompatActivity implements OnRefreshCallback
 		LinearLayout llMenuAppBarMain = findViewById(R.id.llMenuAppBarMain);
 		vpMain = findViewById(R.id.vpMain);
 		stMain = findViewById(R.id.stMain);
+		llMenuAppBarMain.setOnClickListener(this);
 		vpFragments = new ArrayList<>();
 		vpTabTitles = new ArrayList<>();
 		vpTabIcons = new ArrayList<>();
-		dlMain.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
-		llMenuAppBarMain.setOnClickListener(this);
 		RoundedBitmapDrawable roundUserPlaceholder = RoundedBitmapDrawableFactory.create(res, BitmapFactory.decodeResource(res, R.drawable.ic_user_placeholder));
 		roundUserPlaceholder.setCircular(true);
 		ivEmployeePhotoHeaderDrawerMainOptions = new DisplayImageOptions.Builder()
@@ -128,6 +127,7 @@ public class MainActivity extends AppCompatActivity implements OnRefreshCallback
 			return;
 		}
 		UI.hideSystemUi(window, false, false, false, false);
+		dlMain.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
 		setOnBackPressedCallback(null);
 		if(db == null || imageLoader == null) {
 			SplashFragment splash = new SplashFragment();
@@ -208,6 +208,7 @@ public class MainActivity extends AppCompatActivity implements OnRefreshCallback
 			vpMain.invalidate();
 			stMain.init();
 		}
+		validateTime();
 	}
 
 	@Override
@@ -215,7 +216,6 @@ public class MainActivity extends AppCompatActivity implements OnRefreshCallback
 		this.db = db;
 		this.imageLoader = imageLoader;
 		onRefresh();
-		validateTime();
 	}
 
 	@Override
@@ -243,8 +243,10 @@ public class MainActivity extends AppCompatActivity implements OnRefreshCallback
 				break;
 			case 1://TIME_IN_OUT
 				if(Menu.TIME_IN_OUT.getName().equals(Convention.TIME_IN.getName())) {
+					//TIME IN
 				}
 				else {
+					//TIME OUT
 				}
 				break;
 			case 2://BREAKS

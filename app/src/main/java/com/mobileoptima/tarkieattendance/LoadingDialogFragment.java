@@ -15,6 +15,7 @@ import com.android.library.Sqlite.SQLiteAdapter;
 import com.android.library.Utils.UI;
 import com.android.library.widgets.CustomTextView;
 import com.mobileoptima.constants.Action;
+import com.mobileoptima.data.Get;
 import com.mobileoptima.data.Rx;
 import com.mobileoptima.data.Tx;
 import com.mobileoptima.interfaces.Callback.OnBackPressedCallback;
@@ -55,8 +56,8 @@ public class LoadingDialogFragment extends Fragment implements OnBackPressedCall
 							Thread.sleep(250);
 							handler.sendMessage(handler.obtainMessage());
 							if(result) {
-//								Rx.serverTime(db, LoadingDialogFragment.this);
-//								Thread.sleep(250);
+								Rx.serverTime(db, LoadingDialogFragment.this);
+								Thread.sleep(250);
 								handler.sendMessage(handler.obtainMessage());
 								Rx.company(db, LoadingDialogFragment.this);
 								Thread.sleep(250);
@@ -85,7 +86,10 @@ public class LoadingDialogFragment extends Fragment implements OnBackPressedCall
 							break;
 						case UPDATE_MASTER_FILE:
 							max = 9;
-							result = Rx.syncBatchID(db, LoadingDialogFragment.this);
+							String syncBatchID = Get.syncBatchID(db);
+							if(syncBatchID == null || syncBatchID.isEmpty()) {
+								result = Rx.syncBatchID(db, LoadingDialogFragment.this);
+							}
 							Thread.sleep(250);
 							handler.sendMessage(handler.obtainMessage());
 							if(result) {

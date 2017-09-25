@@ -58,7 +58,7 @@ public class Time {
 		return formattedDateTime.toString();
 	}
 
-	public static String getTimestamp() {
+	public static String getDeviceTimestamp() {
 		return convertMilliToTimestamp(System.currentTimeMillis());
 	}
 
@@ -70,17 +70,19 @@ public class Time {
 
 	public static String getTimeZoneID(String dateTime, long milli) {
 		String timeZoneID = null;
-		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm", locale);
+		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", locale);
 		format.setTimeZone(TimeZone.getTimeZone(TimeZone.getDefault().getID()));
 		String timestampFromTimeZone = format.format(milli);
 		dateTime = dateTime.substring(0, dateTime.length() - 2);
+		timestampFromTimeZone = timestampFromTimeZone.substring(0, timestampFromTimeZone.length() - 2);
 		if(timestampFromTimeZone.equals(dateTime)) {
 			timeZoneID = TimeZone.getDefault().getID();
 		}
 		for(String availableTimeZoneID : TimeZone.getAvailableIDs()) {
-			format = new SimpleDateFormat("yyyy-MM-dd HH:mm", locale);
+			format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", locale);
 			format.setTimeZone(TimeZone.getTimeZone(availableTimeZoneID));
 			timestampFromTimeZone = format.format(milli);
+			timestampFromTimeZone = timestampFromTimeZone.substring(0, timestampFromTimeZone.length() - 2);
 			if(timestampFromTimeZone.equals(dateTime)) {
 				timeZoneID = availableTimeZoneID;
 				break;

@@ -16,6 +16,7 @@ import com.mobileoptima.models.MasterExpenseType;
 import com.mobileoptima.models.MasterExpenseTypeCategory;
 import com.mobileoptima.models.MasterOvertimeReason;
 import com.mobileoptima.models.MasterScheduleTime;
+import com.mobileoptima.models.Store;
 
 import java.util.ArrayList;
 
@@ -148,7 +149,7 @@ public class Save {
 
 	public static boolean login(SQLiteAdapter db, String employeeID) {
 		ArrayList<FieldValue> fieldValues = new ArrayList<>();
-		String timestamp = Time.getTimestamp();
+		String timestamp = Time.getDeviceTimestamp();
 		fieldValues.add(new FieldValue("dDate", Time.getDateFromTimestamp(timestamp)));
 		fieldValues.add(new FieldValue("dTime", Time.getTimeFromTimestamp(timestamp)));
 		fieldValues.add(new FieldValue("employeeID", employeeID));
@@ -207,10 +208,38 @@ public class Save {
 		return db.update(table, fieldValues, conditions);
 	}
 
+	public static boolean store(SQLiteAdapter db, Store store) {
+		String table = Table.BREAK_TYPES.getName();
+		ArrayList<FieldValue> fieldValues = new ArrayList<>();
+		fieldValues.add(new FieldValue("ID", store.ID));
+		fieldValues.add(new FieldValue("name", breakType.name));
+		fieldValues.add(new FieldValue("duration", breakType.duration));
+		fieldValues.add(new FieldValue("isActive", true));
+		fieldValues.add(new FieldValue("ID", store.ID));
+		query.add(new FieldValue("name", name));
+		query.add(new FieldValue("empID", empID));
+		query.add(new FieldValue("address", address));
+		query.add(new FieldValue("webStoreID", webStoreID));
+		query.add(new FieldValue("contactNo", dataObj.getString("contact_number")));
+		query.add(new FieldValue("gpsLongitude", dataObj.getDouble("longitude")));
+		query.add(new FieldValue("gpsLatitude", dataObj.getDouble("latitude")));
+		query.add(new FieldValue("radius", dataObj.getInt("geo_fence_radius")));
+		query.add(new FieldValue("isActive", dataObj.getInt("is_active")));
+		query.add(new FieldValue("isWebUpdate", true));
+		query.add(new FieldValue("isSync", true));
+		query.add(new FieldValue("isTag", true));
+		if(db.getCount("SELECT ID FROM " + table + " WHERE ID = '" + breakType.ID + "'") == 0) {
+			return db.insert(table, fieldValues) > 0;
+		}
+		ArrayList<Condition> conditions = new ArrayList<>();
+		conditions.add(new Condition(new FieldValue("ID", breakType.ID)));
+		return db.update(table, fieldValues, conditions);
+	}
+
 	public static boolean syncBatchID(SQLiteAdapter db, String syncBatchID) {
 		String table = Table.SYNC_BATCH.getName();
 		ArrayList<FieldValue> fieldValues = new ArrayList<>();
-		String timestamp = Time.getTimestamp();
+		String timestamp = Time.getDeviceTimestamp();
 		fieldValues.add(new FieldValue("dDate", Time.getDateFromTimestamp(timestamp)));
 		fieldValues.add(new FieldValue("dTime", Time.getTimeFromTimestamp(timestamp)));
 		fieldValues.add(new FieldValue("syncBatchID", syncBatchID));
