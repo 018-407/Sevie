@@ -217,6 +217,15 @@ public class MainActivity extends AppCompatActivity implements OnRefreshCallback
 		vpTabIcons.add(R.string.fa_home);
 		for(Modules module : Modules.values()) {
 			boolean isEnabled = Get.isModuleEnabled(db, module.getID());
+			if(module == Modules.ATTENDANCE) {
+				isEnabled = true;
+			}
+			if(module == Modules.INVENTORY) {
+				isEnabled = false;
+			}
+			if(module == Modules.FORMS) {
+				isEnabled = false;
+			}
 			module.setEnabled(isEnabled);
 			if(isEnabled) {
 				vpFragments.add(module.getFragment());

@@ -4,7 +4,6 @@ import android.os.SystemClock;
 
 import com.android.library.Sqlite.SQLiteAdapter;
 import com.android.library.Utils.Time;
-import com.mobileoptima.constants.Modules;
 import com.mobileoptima.constants.Settings;
 import com.mobileoptima.constants.Table;
 import com.mobileoptima.models.CheckIn;
@@ -99,7 +98,7 @@ public class Get {
 	}
 
 	public static boolean isModuleEnabled(SQLiteAdapter db, String moduleID) {
-		return moduleID.equals(Modules.ATTENDANCE.getID()) || db.getInt("SELECT isEnabled FROM " + Table.MODULES.getName() + " WHERE name = '" + moduleID + "'") == 1;
+		return db.getInt("SELECT isEnabled FROM " + Table.MODULES.getName() + " WHERE name = '" + moduleID + "'") == 1;
 	}
 
 	public static long serverTimestamp(SQLiteAdapter db) {
