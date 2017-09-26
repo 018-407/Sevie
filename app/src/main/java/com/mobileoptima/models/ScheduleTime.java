@@ -1,6 +1,6 @@
 package com.mobileoptima.models;
 
-public class MasterScheduleTime {
+public class ScheduleTime {
 	public String ID;
 	public String timeIn;
 	public String timeOut;

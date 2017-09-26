@@ -6,9 +6,13 @@ public class Transaction {
 	public String dTime;
 	public String syncBatchID;
 	public String webID;
-	public MasterEmployee employee;
-	public GPS gps;
+	public Employee employee = new Employee();
+	public GPS gps = new GPS();
+	public int batteryLevel;
 	public boolean isFromWeb;
 	public boolean isSync;
-	public int batteryLevel;
+	public boolean isUpdate;
+	public boolean isWebUpdate;
+	public boolean isDelete;
+	public boolean isWebDelete;
 }

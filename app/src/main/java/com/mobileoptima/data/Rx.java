@@ -2,6 +2,7 @@ package com.mobileoptima.data;
 
 import com.android.library.Connection.Http;
 import com.android.library.Sqlite.SQLiteAdapter;
+import com.android.library.Utils.Time;
 import com.android.library.Utils.Util;
 import com.mobileoptima.Utils.Utils;
 import com.mobileoptima.constants.App;
@@ -9,16 +10,17 @@ import com.mobileoptima.constants.Convention;
 import com.mobileoptima.constants.Modules;
 import com.mobileoptima.constants.Settings;
 import com.mobileoptima.constants.Table;
-import com.mobileoptima.models.GPS;
-import com.mobileoptima.models.MasterAlertType;
-import com.mobileoptima.models.MasterBreakType;
-import com.mobileoptima.models.MasterCompany;
-import com.mobileoptima.models.MasterEmployee;
-import com.mobileoptima.models.MasterExpenseType;
-import com.mobileoptima.models.MasterExpenseTypeCategory;
-import com.mobileoptima.models.MasterOvertimeReason;
-import com.mobileoptima.models.MasterScheduleTime;
+import com.mobileoptima.constants.VisitStatus;
+import com.mobileoptima.models.AlertType;
+import com.mobileoptima.models.BreakType;
+import com.mobileoptima.models.Company;
+import com.mobileoptima.models.Employee;
+import com.mobileoptima.models.ExpenseType;
+import com.mobileoptima.models.ExpenseTypeCategory;
+import com.mobileoptima.models.OvertimeReason;
+import com.mobileoptima.models.ScheduleTime;
 import com.mobileoptima.models.Store;
+import com.mobileoptima.models.Visit;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -45,7 +47,7 @@ public class Rx {
 		db.rawQuery("UPDATE " + Table.ALERT_TYPES.getName() + " SET isActive = 0");
 		for(int x = 0; x < dataArray.length(); x++) {
 			JSONObject dataObj = dataArray.optJSONObject(x);
-			MasterAlertType alertType = new MasterAlertType();
+			AlertType alertType = new AlertType();
 			alertType.ID = dataObj.optString("alert_type_id");
 			alertType.name = dataObj.optString("alert_type");
 			Save.alertType(db, alertType);
@@ -70,7 +72,7 @@ public class Rx {
 		db.rawQuery("UPDATE " + Table.BREAK_TYPES.getName() + " SET isActive = 0");
 		for(int x = 0; x < dataArray.length(); x++) {
 			JSONObject dataObj = dataArray.optJSONObject(x);
-			MasterBreakType breakType = new MasterBreakType();
+			BreakType breakType = new BreakType();
 			breakType.ID = dataObj.optString("break_id");
 			breakType.name = dataObj.optString("break_name");
 			breakType.duration = dataObj.optInt("duration");
@@ -95,7 +97,7 @@ public class Rx {
 		db.beginTransaction();
 		for(int x = 0; x < dataArray.length(); x++) {
 			JSONObject dataObj = dataArray.optJSONObject(x);
-			MasterCompany company = new MasterCompany();
+			Company company = new Company();
 			company.ID = dataObj.optString("company_id");
 			company.name = dataObj.optString("company_name");
 			company.code = dataObj.optString("company_code");
@@ -171,7 +173,7 @@ public class Rx {
 		db.rawQuery("UPDATE " + Table.EMPLOYEES.getName() + " SET isActive = 0");
 		for(int x = 0; x < dataArray.length(); x++) {
 			JSONObject dataObj = dataArray.optJSONObject(x);
-			MasterEmployee employee = new MasterEmployee();
+			Employee employee = new Employee();
 			employee.ID = dataObj.optString("employee_id");
 			employee.firstName = dataObj.optString("firstname");
 			employee.lastName = dataObj.optString("lastname");
@@ -205,7 +207,7 @@ public class Rx {
 		db.rawQuery("UPDATE " + Table.EXPENSE_TYPE_CATEGORIES.getName() + " SET isActive = 0");
 		for(int x = 0; x < dataArray.length(); x++) {
 			JSONObject dataObj = dataArray.optJSONObject(x);
-			MasterExpenseTypeCategory expenseTypeCategory = new MasterExpenseTypeCategory();
+			ExpenseTypeCategory expenseTypeCategory = new ExpenseTypeCategory();
 			expenseTypeCategory.ID = dataObj.optString("expense_category_id");
 			expenseTypeCategory.name = dataObj.optString("expense_category_name");
 			if(Save.expenseTypeCategory(db, expenseTypeCategory)) {
@@ -232,10 +234,10 @@ public class Rx {
 		db.rawQuery("UPDATE " + Table.EXPENSE_TYPES.getName() + " SET isActive = 0");
 		for(int x = 0; x < dataArray.length(); x++) {
 			JSONObject dataObj = dataArray.optJSONObject(x);
-			MasterExpenseType expenseType = new MasterExpenseType();
+			ExpenseType expenseType = new ExpenseType();
 			expenseType.ID = dataObj.optString("expense_type_id");
 			expenseType.name = dataObj.optString("expense_type_name");
-			MasterExpenseTypeCategory expenseTypeCategory = new MasterExpenseTypeCategory();
+			ExpenseTypeCategory expenseTypeCategory = new ExpenseTypeCategory();
 			expenseTypeCategory.ID = expenseTypeCategoryID;
 			expenseType.expenseTypeCategory = expenseTypeCategory;
 			expenseType.isRequired = dataObj.optString("is_required").equals("yes");
@@ -261,7 +263,7 @@ public class Rx {
 		db.rawQuery("UPDATE " + Table.OVERTIME_REASONS.getName() + " SET isActive = 0");
 		for(int x = 0; x < dataArray.length(); x++) {
 			JSONObject dataObj = dataArray.optJSONObject(x);
-			MasterOvertimeReason overtimeReason = new MasterOvertimeReason();
+			OvertimeReason overtimeReason = new OvertimeReason();
 			overtimeReason.ID = dataObj.optString("overtime_reason_id");
 			overtimeReason.name = dataObj.optString("overtime_reason");
 			Save.overtimeReason(db, overtimeReason);
@@ -286,7 +288,7 @@ public class Rx {
 		db.rawQuery("UPDATE " + Table.SCHEDULE_TIMES.getName() + " SET isActive = 0");
 		for(int x = 0; x < dataArray.length(); x++) {
 			JSONObject dataObj = dataArray.optJSONObject(x);
-			MasterScheduleTime scheduleTime = new MasterScheduleTime();
+			ScheduleTime scheduleTime = new ScheduleTime();
 			scheduleTime.ID = dataObj.optString("time_schedule_id");
 			scheduleTime.timeIn = dataObj.optString("time_in");
 			scheduleTime.timeOut = dataObj.optString("time_out");
@@ -326,6 +328,49 @@ public class Rx {
 		return db.endTransaction();
 	}
 
+	public static boolean stores(SQLiteAdapter db, OnErrorCallback errorCallback) {
+		String employeeID = Get.employeeID(db);
+		HashMap<String, Object> map = new HashMap<>();
+		map.put("api_key", Get.apiKey(db));
+		map.put("employee_id", employeeID);
+		String url = App.WEB_API + "get-stores-for-app";
+		String params = Http.jasonObjectToURL(new JSONObject(map));
+		String response = Http.get(url, params, Settings.HTTP_REQUEST_TIMEOUT_RX);
+		Utils.log("stores", url);
+		Utils.log("stores", params);
+		Utils.log("stores", response);
+		JSONArray dataArray = Utils.getDataArray(params, response, errorCallback);
+		if(dataArray == null) {
+			return false;
+		}
+		db.beginTransaction();
+		db.rawQuery("UPDATE " + Table.STORES.getName() + " SET isTag = 0, isDelete = 1, isWebDelete = 1 WHERE employeeID = '" + employeeID + "' AND isTag = 1 AND isFromVisit = 0");
+		for(int x = 0; x < dataArray.length(); x++) {
+			JSONObject dataObj = dataArray.optJSONObject(x);
+			Store store = new Store();
+			store.name = dataObj.optString("store_name");
+			store.address = dataObj.optString("address");
+			store.contactNumber = dataObj.optString("contact_number");
+			store.class1ID = dataObj.optString("store_class_1_id");
+			store.class2ID = dataObj.optString("store_class_2_id");
+			store.class3ID = dataObj.optString("store_class_3_id");
+			store.gpsLongitude = dataObj.optDouble("longitude");
+			store.gpsLatitude = dataObj.optDouble("latitude");
+			store.geoFenceRadius = dataObj.optInt("geo_fence_radius");
+			store.isTag = true;
+			store.webID = dataObj.optString("store_id");
+			store.employee.ID = employeeID;
+			store.isFromWeb = true;
+			store.isSync = true;
+			store.isUpdate = true;
+			store.isWebUpdate = true;
+			store.isDelete = dataObj.optInt("is_active") == 0;
+			store.isWebDelete = store.isDelete;
+			Save.store(db, store);
+		}
+		return db.endTransaction();
+	}
+
 	public static boolean syncBatchID(SQLiteAdapter db, OnErrorCallback errorCallback) {
 		HashMap<String, Object> map = new HashMap<>();
 		map.put("api_key", Get.apiKey(db));
@@ -347,74 +392,69 @@ public class Rx {
 		return db.endTransaction();
 	}
 
-	public static boolean stores(SQLiteAdapter db, OnErrorCallback errorCallback) {
+	public static boolean visits(SQLiteAdapter db, OnErrorCallback errorCallback) {
+		String employeeID = Get.employeeID(db);
+		long timestamp = System.currentTimeMillis();
+		String dateStart = Time.getDateFromTimestamp(Time.convertMilliToTimestamp(timestamp));
+		String dateEnd = Time.getDateFromTimestamp(Time.convertMilliToTimestamp(timestamp + Time.convertDaysToMilli(15)));
+		String status = VisitStatus.PENDING;
 		HashMap<String, Object> map = new HashMap<>();
 		map.put("api_key", Get.apiKey(db));
-		map.put("employee_id", Get.employeeID(db));
-		String url = App.WEB_API + "get-stores-for-app";
+		map.put("employee_id", employeeID);
+		map.put("start_date", dateStart);
+		map.put("end_date", dateEnd);
+		map.put("get_deleted", "yes");
+		map.put("status", VisitStatus.PENDING);
+		String url = App.WEB_API + "get-itinerary";
 		String params = Http.jasonObjectToURL(new JSONObject(map));
 		String response = Http.get(url, params, Settings.HTTP_REQUEST_TIMEOUT_RX);
-		Utils.log("stores", url);
-		Utils.log("stores", params);
-		Utils.log("stores", response);
+		Utils.log("visits", url);
+		Utils.log("visits", params);
+		Utils.log("visits", response);
 		JSONArray dataArray = Utils.getDataArray(params, response, errorCallback);
 		if(dataArray == null) {
 			return false;
 		}
 		db.beginTransaction();
-		db.rawQuery("UPDATE " + Table.BREAK_TYPES.getName() + " SET isActive = 0");
+		db.rawQuery("UPDATE " + Table.VISITS.getName() + " SET isDelete = 1, isWebDelete = 1 WHERE employeeID = '" + employeeID + "' AND dateStart >= '" + dateStart + "' AND dateEnd <= '" + dateEnd + "' AND status = '" + status + "'");
 		for(int x = 0; x < dataArray.length(); x++) {
 			JSONObject dataObj = dataArray.optJSONObject(x);
 			Store store = new Store();
-			store.syncBatchID = dataObj.optString("");
-			store.webID = dataObj.optString("store_id");
-			MasterEmployee employee = new MasterEmployee();
-			employee.ID = dataObj.optString("");
-			store.employee = employee;
-			GPS gps = new GPS();
-			gps.longitude = dataObj.optDouble("");
-			gps.latitude = dataObj.optDouble("");
-			store.gps = gps;
-			store.isFromWeb = true;
-			store.isSync = dataObj.optInt("") == 1;
-			store.batteryLevel = dataObj.optInt("");
 			store.name = dataObj.optString("store_name");
-			store.address = dataObj.optString("address");
-			store.contactNumber = dataObj.optString("contact_number");
-			int class1ID = dataObj.getInt("store_class_1_id");
-			int class2ID = dataObj.getInt("store_class_2_id");
-			int class3ID = dataObj.getInt("store_class_3_id");
-			query.clearAll();
-			query.add(new FieldValue("name", name));
-			query.add(new FieldValue("empID", empID));
-			query.add(new FieldValue("address", address));
-			query.add(new FieldValue("radius", dataObj.getInt("geo_fence_radius")));
-			query.add(new FieldValue("isActive", dataObj.getInt("is_active")));
-			query.add(new FieldValue("isWebUpdate", true));
-			query.add(new FieldValue("isSync", true));
-			query.add(new FieldValue("isTag", true));
-			if(class1ID != 0) {
-				query.add(new FieldValue("class1ID", class1ID));
-			}
-			if(class2ID != 0) {
-				query.add(new FieldValue("class2ID", class2ID));
-			}
-			if(class3ID != 0) {
-				query.add(new FieldValue("class3ID", class3ID));
-			}
-			query.add(new FieldValue("name", name));
-			query.add(new FieldValue("empID", empID));
-			query.add(new FieldValue("address", address));
-			query.add(new FieldValue("webStoreID", webStoreID));
-			query.add(new FieldValue("contactNo", dataObj.getString("contact_number")));
-			query.add(new FieldValue("gpsLongitude", dataObj.getDouble("longitude")));
-			query.add(new FieldValue("gpsLatitude", dataObj.getDouble("latitude")));
-			query.add(new FieldValue("radius", dataObj.getInt("geo_fence_radius")));
-			query.add(new FieldValue("isActive", dataObj.getInt("is_active")));
-			query.add(new FieldValue("isWebUpdate", true));
-			query.add(new FieldValue("isSync", true));
-			query.add(new FieldValue("isTag", true));
+			store.address = dataObj.optString("store_address");
+			store.contactNumber = dataObj.optString("store_contact_number");
+			store.gpsLongitude = dataObj.optDouble("store_longitude");
+			store.gpsLatitude = dataObj.optDouble("store_latitude");
+			store.geoFenceRadius = dataObj.optInt("store_radius");
+			store.isFromVisit = true;
+			store.webID = dataObj.optString("store_id");
+			store.isFromWeb = true;
+			store.isSync = true;
+			store.isUpdate = true;
+			store.isWebUpdate = true;
+			store.isDelete = false;
+			store.isWebDelete = false;
 			Save.store(db, store);
+			Visit visit = new Visit();
+			visit.name = store.name;
+			visit.dateStart = dataObj.optString("start_date");
+			visit.dateEnd = dataObj.optString("end_date");
+			visit.deliveryFee = dataObj.optString("delivery_fee");
+			visit.mappingCode = dataObj.optString("mapping_code");
+			visit.notes = dataObj.optString("notes");
+			store.ID = Get.storeIDFromWebID(db, store.webID);
+			visit.store = store;
+			visit.dDate = dataObj.optString("date_created");
+			visit.dTime = dataObj.optString("time_created");
+			visit.webID = dataObj.optString("itinerary_id");
+			visit.employee.ID = dataObj.optString("employee_id");
+			visit.isFromWeb = true;
+			visit.isSync = true;
+			visit.isUpdate = true;
+			visit.isWebUpdate = true;
+			visit.isDelete = dataObj.optInt("is_deleted") == 1;
+			visit.isWebDelete = visit.isDelete;
+			Save.visit(db, visit);
 		}
 		return db.endTransaction();
 	}

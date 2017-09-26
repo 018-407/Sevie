@@ -7,8 +7,10 @@ import com.android.library.Utils.Time;
 import com.mobileoptima.constants.Modules;
 import com.mobileoptima.constants.Settings;
 import com.mobileoptima.constants.Table;
-import com.mobileoptima.models.MasterCompany;
-import com.mobileoptima.models.MasterEmployee;
+import com.mobileoptima.models.CheckIn;
+import com.mobileoptima.models.CheckOut;
+import com.mobileoptima.models.Company;
+import com.mobileoptima.models.Employee;
 import com.mobileoptima.models.Store;
 
 import net.sqlcipher.Cursor;
@@ -18,11 +20,21 @@ public class Get {
 		return db.getString("SELECT apiKey FROM " + Table.DEVICE.getName() + " WHERE ID = 1");
 	}
 
-	public static MasterCompany company(SQLiteAdapter db) {
-		MasterCompany company = null;
+	public static CheckIn checkIn(SQLiteAdapter db, String checkInID) {
+		CheckIn checkIn = new CheckIn();
+		return checkIn;
+	}
+
+	public static CheckOut checkOut(SQLiteAdapter db, String checkOutID) {
+		CheckOut checkOut = new CheckOut();
+		return checkOut;
+	}
+
+	public static Company company(SQLiteAdapter db) {
+		Company company = null;
 		Cursor cursor = db.rawQuery("SELECT ID, name, deviceCode, address, mobile, landline, logoURL, expirationDate FROM " + Table.COMPANY.getName() + " LIMIT 1");
 		while(cursor.moveToNext()) {
-			company = new MasterCompany();
+			company = new Company();
 			company.ID = cursor.getString(0);
 			company.name = cursor.getString(1);
 			company.code = cursor.getString(2);
@@ -48,11 +60,10 @@ public class Get {
 		return db.getString("SELECT convention FROM " + Table.CONVENTION.getName() + " WHERE name = '" + conventionID + "'");
 	}
 
-	public static MasterEmployee employee(SQLiteAdapter db, String employeeID) {
-		MasterEmployee employee = null;
+	public static Employee employee(SQLiteAdapter db, String employeeID) {
+		Employee employee = new Employee();
 		Cursor cursor = db.rawQuery("SELECT firstName, lastName, employeeNumber, email, mobile, photoURL, teamID, isApprover FROM " + Table.EMPLOYEES.getName() + " WHERE ID = '" + employeeID + "'");
 		while(cursor.moveToNext()) {
-			employee = new MasterEmployee();
 			employee.ID = employeeID;
 			employee.firstName = cursor.getString(0);
 			employee.lastName = cursor.getString(1);
@@ -105,37 +116,35 @@ public class Get {
 	}
 
 	public static Store store(SQLiteAdapter db, String storeID) {
-		Store store = null;
-		Cursor cursor = db.rawQuery("");
+		Store store = new Store();
+		Cursor cursor = db.rawQuery("SELECT name, address, contactNumber, class1ID, class2ID, class3ID, gpsLongitude, gpsLatitude, geoFenceRadius, ID, syncBatchID, webID, employeeID FROM " + Table.STORES.getName() + " WHERE ID = '" + storeID + "'");
 		while(cursor.moveToNext()) {
-			store = new Store();
-			store.ID = "";
-			store.name = "";
-			store.address = "";
+			store.name = cursor.getString(0);
+			store.address = cursor.getString(1);
+			store.contactNumber = cursor.getString(2);
+			store.class1ID = cursor.getString(3);
+			store.class2ID = cursor.getString(4);
+			store.class3ID = cursor.getString(5);
+			store.gpsLongitude = cursor.getDouble(6);
+			store.gpsLatitude = cursor.getDouble(7);
+			store.geoFenceRadius = cursor.getInt(8);
+			store.ID = cursor.getString(9);
+			store.syncBatchID = cursor.getString(10);
+			store.webID = cursor.getString(11);
+			store.employee = employee(db, cursor.getString(12));
 		}
 		cursor.close();
-		store = new Store();
-		switch(storeID) {
-			case "1":
-				store.ID = "1";
-				break;
-			case "2":
-				store.ID = "2";
-				break;
-			case "3":
-				store.ID = "3";
-				break;
-		}
-		store.name = "Store " + store.ID;
-		store.address = "Address " + store.ID;
 		return store;
-		//TODO
 	}
 
 	public static String storeID(SQLiteAdapter db) {
 //		return db.getString("SELECT storeID FROM " + Table.ACCESS.getName() + " WHERE isLogOut = 0");
 		return null;
 		//TODO
+	}
+
+	public static String storeIDFromWebID(SQLiteAdapter db, String webID) {
+		return db.getString("SELECT ID FROM " + Table.STORES.getName() + " WHERE webID = '" + webID + "'");
 	}
 
 	public static String syncBatchID(SQLiteAdapter db) {
@@ -152,5 +161,10 @@ public class Get {
 //		return db.getString("SELECT ID FROM " + Table.ACCESS.getName() + " WHERE ID = '" + timeInID + "'");
 		return null;
 		//TODO
+	}
+
+	public static int visitTodayCount(SQLiteAdapter db) {
+		String date = Time.getDateFromTimestamp(Time.getDeviceTimestamp());
+		return db.getInt("SELECT COUNT(ID) FROM " + Table.VISITS.getName() + " WHERE dateStart >= '" + date + "' AND dateEnd <= '" + date + "' AND isFromWeb = 0");
 	}
 }

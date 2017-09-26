@@ -8,20 +8,21 @@ import com.android.library.Sqlite.SQLiteAdapter;
 import com.android.library.Utils.Time;
 import com.mobileoptima.constants.Convention;
 import com.mobileoptima.constants.Table;
-import com.mobileoptima.models.MasterAlertType;
-import com.mobileoptima.models.MasterBreakType;
-import com.mobileoptima.models.MasterCompany;
-import com.mobileoptima.models.MasterEmployee;
-import com.mobileoptima.models.MasterExpenseType;
-import com.mobileoptima.models.MasterExpenseTypeCategory;
-import com.mobileoptima.models.MasterOvertimeReason;
-import com.mobileoptima.models.MasterScheduleTime;
+import com.mobileoptima.models.AlertType;
+import com.mobileoptima.models.BreakType;
+import com.mobileoptima.models.Company;
+import com.mobileoptima.models.Employee;
+import com.mobileoptima.models.ExpenseType;
+import com.mobileoptima.models.ExpenseTypeCategory;
+import com.mobileoptima.models.OvertimeReason;
+import com.mobileoptima.models.ScheduleTime;
 import com.mobileoptima.models.Store;
+import com.mobileoptima.models.Visit;
 
 import java.util.ArrayList;
 
 public class Save {
-	public static boolean alertType(SQLiteAdapter db, MasterAlertType alertType) {
+	public static boolean alertType(SQLiteAdapter db, AlertType alertType) {
 		String table = Table.ALERT_TYPES.getName();
 		ArrayList<FieldValue> fieldValues = new ArrayList<>();
 		fieldValues.add(new FieldValue("ID", alertType.ID));
@@ -49,7 +50,7 @@ public class Save {
 		return db.update(table, fieldValues, conditions);
 	}
 
-	public static boolean breakType(SQLiteAdapter db, MasterBreakType breakType) {
+	public static boolean breakType(SQLiteAdapter db, BreakType breakType) {
 		String table = Table.BREAK_TYPES.getName();
 		ArrayList<FieldValue> fieldValues = new ArrayList<>();
 		fieldValues.add(new FieldValue("ID", breakType.ID));
@@ -64,7 +65,7 @@ public class Save {
 		return db.update(table, fieldValues, conditions);
 	}
 
-	public static boolean company(SQLiteAdapter db, MasterCompany company) {
+	public static boolean company(SQLiteAdapter db, Company company) {
 		String table = Table.COMPANY.getName();
 		ArrayList<FieldValue> fieldValues = new ArrayList<>();
 		fieldValues.add(new FieldValue("ID", company.ID));
@@ -96,7 +97,7 @@ public class Save {
 		return db.update(table, fieldValues, conditions);
 	}
 
-	public static boolean employee(SQLiteAdapter db, MasterEmployee employee) {
+	public static boolean employee(SQLiteAdapter db, Employee employee) {
 		String table = Table.EMPLOYEES.getName();
 		ArrayList<FieldValue> fieldValues = new ArrayList<>();
 		fieldValues.add(new FieldValue("ID", employee.ID));
@@ -117,7 +118,7 @@ public class Save {
 		return db.update(table, fieldValues, conditions);
 	}
 
-	public static boolean expenseType(SQLiteAdapter db, MasterExpenseType expenseType) {
+	public static boolean expenseType(SQLiteAdapter db, ExpenseType expenseType) {
 		String table = Table.EXPENSE_TYPES.getName();
 		ArrayList<FieldValue> fieldValues = new ArrayList<>();
 		fieldValues.add(new FieldValue("ID", expenseType.ID));
@@ -133,7 +134,7 @@ public class Save {
 		return db.update(table, fieldValues, conditions);
 	}
 
-	public static boolean expenseTypeCategory(SQLiteAdapter db, MasterExpenseTypeCategory expenseTypeCategory) {
+	public static boolean expenseTypeCategory(SQLiteAdapter db, ExpenseTypeCategory expenseTypeCategory) {
 		String table = Table.EXPENSE_TYPE_CATEGORIES.getName();
 		ArrayList<FieldValue> fieldValues = new ArrayList<>();
 		fieldValues.add(new FieldValue("ID", expenseTypeCategory.ID));
@@ -144,6 +145,14 @@ public class Save {
 		}
 		ArrayList<Condition> conditions = new ArrayList<>();
 		conditions.add(new Condition(new FieldValue("ID", expenseTypeCategory.ID)));
+		return db.update(table, fieldValues, conditions);
+	}
+
+	public static boolean isDelete(SQLiteAdapter db, String table, String ID) {
+		ArrayList<FieldValue> fieldValues = new ArrayList<>();
+		fieldValues.add(new FieldValue("isDelete", true));
+		ArrayList<Condition> conditions = new ArrayList<>();
+		conditions.add(new Condition(new FieldValue("ID", ID)));
 		return db.update(table, fieldValues, conditions);
 	}
 
@@ -178,7 +187,7 @@ public class Save {
 		return db.update(table, fieldValues, conditions);
 	}
 
-	public static boolean overtimeReason(SQLiteAdapter db, MasterOvertimeReason overtimeReason) {
+	public static boolean overtimeReason(SQLiteAdapter db, OvertimeReason overtimeReason) {
 		String table = Table.OVERTIME_REASONS.getName();
 		ArrayList<FieldValue> fieldValues = new ArrayList<>();
 		fieldValues.add(new FieldValue("ID", overtimeReason.ID));
@@ -192,7 +201,7 @@ public class Save {
 		return db.update(table, fieldValues, conditions);
 	}
 
-	public static boolean scheduleTime(SQLiteAdapter db, MasterScheduleTime scheduleTime) {
+	public static boolean scheduleTime(SQLiteAdapter db, ScheduleTime scheduleTime) {
 		String table = Table.SCHEDULE_TIMES.getName();
 		ArrayList<FieldValue> fieldValues = new ArrayList<>();
 		fieldValues.add(new FieldValue("ID", scheduleTime.ID));
@@ -209,30 +218,36 @@ public class Save {
 	}
 
 	public static boolean store(SQLiteAdapter db, Store store) {
-		String table = Table.BREAK_TYPES.getName();
+		String table = Table.STORES.getName();
 		ArrayList<FieldValue> fieldValues = new ArrayList<>();
-		fieldValues.add(new FieldValue("ID", store.ID));
-		fieldValues.add(new FieldValue("name", breakType.name));
-		fieldValues.add(new FieldValue("duration", breakType.duration));
-		fieldValues.add(new FieldValue("isActive", true));
-		fieldValues.add(new FieldValue("ID", store.ID));
-		query.add(new FieldValue("name", name));
-		query.add(new FieldValue("empID", empID));
-		query.add(new FieldValue("address", address));
-		query.add(new FieldValue("webStoreID", webStoreID));
-		query.add(new FieldValue("contactNo", dataObj.getString("contact_number")));
-		query.add(new FieldValue("gpsLongitude", dataObj.getDouble("longitude")));
-		query.add(new FieldValue("gpsLatitude", dataObj.getDouble("latitude")));
-		query.add(new FieldValue("radius", dataObj.getInt("geo_fence_radius")));
-		query.add(new FieldValue("isActive", dataObj.getInt("is_active")));
-		query.add(new FieldValue("isWebUpdate", true));
-		query.add(new FieldValue("isSync", true));
-		query.add(new FieldValue("isTag", true));
-		if(db.getCount("SELECT ID FROM " + table + " WHERE ID = '" + breakType.ID + "'") == 0) {
+		fieldValues.add(new FieldValue("name", store.name));
+		fieldValues.add(new FieldValue("address", store.address));
+		fieldValues.add(new FieldValue("contactNo", store.contactNumber));
+		fieldValues.add(new FieldValue("class1ID", store.class1ID));
+		fieldValues.add(new FieldValue("class2ID", store.class2ID));
+		fieldValues.add(new FieldValue("class3ID", store.class3ID));
+		fieldValues.add(new FieldValue("gpsLongitude", store.gpsLongitude));
+		fieldValues.add(new FieldValue("gpsLatitude", store.gpsLatitude));
+		fieldValues.add(new FieldValue("geoFenceRadius", store.geoFenceRadius));
+		fieldValues.add(new FieldValue("isTag", store.isTag));
+		fieldValues.add(new FieldValue("isFromVisit", store.isFromVisit));
+		fieldValues.add(new FieldValue("syncBatchID", store.syncBatchID));
+		fieldValues.add(new FieldValue("webID", store.webID));
+		fieldValues.add(new FieldValue("employeeID", store.employee.ID));
+		fieldValues.add(new FieldValue("isSync", store.isSync));
+		fieldValues.add(new FieldValue("isUpdate", store.isUpdate));
+		fieldValues.add(new FieldValue("isWebUpdate", store.isWebUpdate));
+		fieldValues.add(new FieldValue("isDelete", store.isDelete));
+		fieldValues.add(new FieldValue("isWebDelete", store.isWebDelete));
+		if(db.getCount("SELECT ID FROM " + table + " WHERE webID = '" + store.webID + "'") == 0) {
+			String timestamp = Time.getDeviceTimestamp();
+			fieldValues.add(new FieldValue("dDate", Time.getDateFromTimestamp(timestamp)));
+			fieldValues.add(new FieldValue("dTime", Time.getTimeFromTimestamp(timestamp)));
+			fieldValues.add(new FieldValue("isFromWeb", store.isFromWeb));
 			return db.insert(table, fieldValues) > 0;
 		}
 		ArrayList<Condition> conditions = new ArrayList<>();
-		conditions.add(new Condition(new FieldValue("ID", breakType.ID)));
+		conditions.add(new Condition(new FieldValue("webID", store.webID)));
 		return db.update(table, fieldValues, conditions);
 	}
 
@@ -262,6 +277,36 @@ public class Save {
 		}
 		ArrayList<Condition> conditions = new ArrayList<>();
 		conditions.add(new Condition(new FieldValue("ID", "1")));
+		return db.update(table, fieldValues, conditions);
+	}
+
+	public static boolean visit(SQLiteAdapter db, Visit visit) {
+		String table = Table.VISITS.getName();
+		ArrayList<FieldValue> fieldValues = new ArrayList<>();
+		fieldValues.add(new FieldValue("name", visit.name));
+		fieldValues.add(new FieldValue("dateStart", visit.dateStart));
+		fieldValues.add(new FieldValue("dateEnd", visit.dateEnd));
+		fieldValues.add(new FieldValue("deliveryFee", visit.deliveryFee));
+		fieldValues.add(new FieldValue("mappingCode", visit.mappingCode));
+		fieldValues.add(new FieldValue("notes", visit.notes));
+		fieldValues.add(new FieldValue("status", visit.status));
+		fieldValues.add(new FieldValue("storeID", visit.store.ID));
+		fieldValues.add(new FieldValue("syncBatchID", visit.syncBatchID));
+		fieldValues.add(new FieldValue("webID", visit.webID));
+		fieldValues.add(new FieldValue("employeeID", visit.employee.ID));
+		fieldValues.add(new FieldValue("isSync", visit.isSync));
+		fieldValues.add(new FieldValue("isUpdate", visit.isUpdate));
+		fieldValues.add(new FieldValue("isWebUpdate", visit.isWebUpdate));
+		fieldValues.add(new FieldValue("isDelete", visit.isDelete));
+		fieldValues.add(new FieldValue("isWebDelete", visit.isWebDelete));
+		if(db.getCount("SELECT ID FROM " + table + " WHERE webID = '" + visit.webID + "'") == 0) {
+			fieldValues.add(new FieldValue("dDate", visit.dDate));
+			fieldValues.add(new FieldValue("dTime", visit.dTime));
+			fieldValues.add(new FieldValue("isFromWeb", visit.isFromWeb));
+			return db.insert(table, fieldValues) > 0;
+		}
+		ArrayList<Condition> conditions = new ArrayList<>();
+		conditions.add(new Condition(new FieldValue("webID", visit.webID)));
 		return db.update(table, fieldValues, conditions);
 	}
 }

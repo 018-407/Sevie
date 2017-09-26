@@ -20,24 +20,33 @@ import android.widget.ScrollView;
 
 import com.android.library.Sqlite.SQLiteAdapter;
 import com.android.library.Utils.Time;
+import com.android.library.Utils.UI;
 import com.android.library.widgets.CustomButton;
 import com.android.library.widgets.CustomTextView;
 import com.mobileoptima.constants.Convention;
 import com.mobileoptima.constants.Modules;
+import com.mobileoptima.constants.Table;
 import com.mobileoptima.data.Get;
 import com.mobileoptima.data.Load;
+import com.mobileoptima.data.Save;
+import com.mobileoptima.interfaces.Callback.OnRefreshCallback;
 import com.mobileoptima.models.Store;
 import com.mobileoptima.models.Visit;
+import com.mobileoptima.tarkieattendance.visits.VisitDetailsFragment;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
-public class HomeFragment extends Fragment implements OnClickListener {
+public class HomeFragment extends Fragment implements OnRefreshCallback, OnClickListener {
+	private CustomButton btnTimeInOutHome, btnStoreHome, btnAddExpenseHome, btnNewVisitsHome;
 	private CustomTextView tvTimeHome, tvAmPmHome, tvDateHome;
 	private DisplayImageOptions ivLogoHomeOptions;
 	private FragmentManager manager;
 	private Handler handler;
 	private ImageLoader imageLoader;
+	private LinearLayout llMenuItemsDrawerMain, llContentHome, llVisitsHome, llTodayVisitsHome, llFormsHome, llInventoryHome;
 	private MainActivity main;
+	private RelativeLayout rlAttendanceHome;
+	private ScrollView svContentHome;
 	private SQLiteAdapter db;
 	private Thread thread;
 	private View menuTimeInOut;
@@ -54,8 +63,10 @@ public class HomeFragment extends Fragment implements OnClickListener {
 			public void run() {
 				try {
 					while(!thread.isInterrupted()) {
-						handler.sendMessage(handler.obtainMessage());
-						Thread.sleep(1000);
+						if(rlAttendanceHome.getVisibility() == View.VISIBLE) {
+							handler.sendMessage(handler.obtainMessage());
+							Thread.sleep(1000);
+						}
 					}
 				}
 				catch(InterruptedException e) {
@@ -85,28 +96,43 @@ public class HomeFragment extends Fragment implements OnClickListener {
 	@Override
 	public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 		View view = inflater.inflate(R.layout.home_layout, container, false);
-		LinearLayout llMenuItemsDrawerMain = main.findViewById(R.id.llMenuItemsDrawerMain);
-		final ScrollView svContentHome = view.findViewById(R.id.svContentHome);
-		final LinearLayout llContentHome = view.findViewById(R.id.llContentHome);
+		llMenuItemsDrawerMain = main.findViewById(R.id.llMenuItemsDrawerMain);
+		svContentHome = view.findViewById(R.id.svContentHome);
+		llContentHome = view.findViewById(R.id.llContentHome);
 		ImageView ivLogoHome = view.findViewById(R.id.ivLogoHome);
-		RelativeLayout rlAttendanceHome = view.findViewById(R.id.rlAttendanceHome);
+		rlAttendanceHome = view.findViewById(R.id.rlAttendanceHome);
 		tvTimeHome = view.findViewById(R.id.tvTimeHome);
 		tvAmPmHome = view.findViewById(R.id.tvAmPmHome);
 		tvDateHome = view.findViewById(R.id.tvDateHome);
-		CustomButton btnStoreHome = view.findViewById(R.id.btnStoreHome);
-		CustomButton btnTimeInOutHome = view.findViewById(R.id.btnTimeInOutHome);
-		LinearLayout llVisitsHome = view.findViewById(R.id.llVisitsHome);
-		LinearLayout llTodayVisitsHome = view.findViewById(R.id.llTodayVisitsHome);
-		CustomButton btnNewVisitsHome = view.findViewById(R.id.btnNewVisitsHome);
-		LinearLayout llFormsHome = view.findViewById(R.id.llFormsHome);
-		LinearLayout llInventoryHome = view.findViewById(R.id.llInventoryHome);
-		CustomButton btnAddExpenseHome = view.findViewById(R.id.btnAddExpenseHome);
+		btnStoreHome = view.findViewById(R.id.btnStoreHome);
+		btnTimeInOutHome = view.findViewById(R.id.btnTimeInOutHome);
+		llVisitsHome = view.findViewById(R.id.llVisitsHome);
+		llTodayVisitsHome = view.findViewById(R.id.llTodayVisitsHome);
+		btnNewVisitsHome = view.findViewById(R.id.btnNewVisitsHome);
+		llFormsHome = view.findViewById(R.id.llFormsHome);
+		llInventoryHome = view.findViewById(R.id.llInventoryHome);
+		btnAddExpenseHome = view.findViewById(R.id.btnAddExpenseHome);
 		imageLoader.displayImage(Get.companyLogo(db), ivLogoHome, ivLogoHomeOptions);
 		btnStoreHome.setAllCaps(false);
 		btnStoreHome.setGravity(Gravity.START);
 		btnStoreHome.setOnClickListener(this);
 		btnTimeInOutHome.setOnClickListener(this);
+		btnNewVisitsHome.setOnClickListener(this);
 		btnAddExpenseHome.setOnClickListener(this);
+		thread.start();
+		onRefresh();
+		return view;
+	}
+
+	@Override
+	public void onDestroy() {
+		super.onDestroy();
+		thread.interrupt();
+	}
+
+	@Override
+	public void onRefresh() {
+		main.setOnBackPressedCallback(null);
 		if(true || (!Modules.VISITS.isEnabled() && !Modules.INVENTORY.isEnabled() && !Modules.FORMS.isEnabled())) {
 			rlAttendanceHome.setVisibility(View.VISIBLE);
 			btnTimeInOutHome.setVisibility(View.VISIBLE);
@@ -123,7 +149,6 @@ public class HomeFragment extends Fragment implements OnClickListener {
 					llContentHome.setLayoutParams(params);
 				}
 			}, 0);
-			thread.start();
 			String storeID = Get.storeID(db);
 			if(storeID != null) {
 				Store store = Get.store(db, storeID);
@@ -140,7 +165,8 @@ public class HomeFragment extends Fragment implements OnClickListener {
 		if(Modules.VISITS.isEnabled()) {
 			llVisitsHome.setVisibility(View.VISIBLE);
 			llTodayVisitsHome.removeAllViews();
-			for(Visit visit : Load.visits(db)) {
+			String today = Time.getDateFromTimestamp(Time.getDeviceTimestamp());
+			for(Visit visit : Load.visits(db, today, today)) {
 				updateTodayVisits(llTodayVisitsHome, visit);
 			}
 			btnNewVisitsHome.setText("New " + Convention.VISITS.getName());
@@ -154,13 +180,6 @@ public class HomeFragment extends Fragment implements OnClickListener {
 		if(Modules.EXPENSE.isEnabled()) {
 			btnAddExpenseHome.setVisibility(View.VISIBLE);
 		}
-		return view;
-	}
-
-	@Override
-	public void onDestroy() {
-		super.onDestroy();
-		thread.interrupt();
 	}
 
 	@Override
@@ -171,18 +190,96 @@ public class HomeFragment extends Fragment implements OnClickListener {
 			case R.id.btnTimeInOutHome:
 				menuTimeInOut.performClick();
 				break;
+			case R.id.btnNewVisitsHome:
+				AlertDialogFragment alert = new AlertDialogFragment();
+				alert.setOnRefreshCallback(this);
+				alert.setTitle("Add " + Convention.VISITS.getName());
+				alert.setMessage("Are you sure you want to add new " + Convention.VISITS.getName() + "?");
+				alert.setPositiveButton("Yes", new View.OnClickListener() {
+					@Override
+					public void onClick(View view) {
+						String timestamp = Time.getDeviceTimestamp();
+						String date = Time.getDateFromTimestamp(timestamp);
+						String time = Time.getTimeFromTimestamp(timestamp);
+						Visit visit = new Visit();
+						visit.name = "New Visit " + (Get.visitTodayCount(db) + 1);
+						visit.dateStart = date;
+						visit.dateEnd = date;
+						visit.dDate = date;
+						visit.dTime = time;
+						visit.employee = Get.employee(db, Get.employeeID(db));
+						Save.visit(db, visit);
+						manager.popBackStack();
+					}
+				});
+				alert.setNegativeButton("No", new View.OnClickListener() {
+					@Override
+					public void onClick(View view) {
+						manager.popBackStack();
+					}
+				});
+				UI.addFragment(manager, R.id.rlMain, alert);
+				break;
 			case R.id.btnAddExpenseHome:
 				break;
 		}
 	}
 
-	public void updateTodayVisits(LinearLayout container, Visit visit) {
+	public void updateTodayVisits(LinearLayout container, final Visit visit) {
+		String storeAddress = visit.store.address;
 		View todayVisitsItem = LayoutInflater.from(main).inflate(R.layout.today_visit_list_item, container, false);
-		((CustomTextView) todayVisitsItem.findViewById(R.id.tvNameTodayVisit)).setText(visit.name);
-		((CustomTextView) todayVisitsItem.findViewById(R.id.tvAddressTodayVisit)).setText(visit.store.address);
+		CustomTextView tvNameTodayVisit = todayVisitsItem.findViewById(R.id.tvNameTodayVisit);
+		CustomTextView tvAddressTodayVisit = todayVisitsItem.findViewById(R.id.tvAddressTodayVisit);
+		tvNameTodayVisit.setText(visit.name);
+		if(storeAddress != null && !storeAddress.isEmpty()) {
+			tvAddressTodayVisit.setText(storeAddress);
+		}
+		else {
+			tvAddressTodayVisit.setVisibility(View.GONE);
+		}
 		todayVisitsItem.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View view) {
+				VisitDetailsFragment visitDetails = new VisitDetailsFragment();
+				UI.addFragment(manager, R.id.rlMain, visitDetails, R.anim.slide_in_rtl, R.anim.slide_out_rtl, R.anim.slide_in_ltr, R.anim.slide_out_ltr);
+			}
+		});
+		todayVisitsItem.setOnLongClickListener(new View.OnLongClickListener() {
+			@Override
+			public boolean onLongClick(View view) {
+				if(visit.isFromWeb || visit.checkIn.ID != null) {
+					AlertDialogFragment alert = new AlertDialogFragment();
+					alert.setOnRefreshCallback(HomeFragment.this);
+					alert.setTitle("Delete " + Convention.VISITS.getName());
+					alert.setMessage("You are not allowed to delete this " + Convention.VISITS.getName() + ".");
+					alert.setPositiveButton("OK", new View.OnClickListener() {
+						@Override
+						public void onClick(View view) {
+							manager.popBackStack();
+						}
+					});
+					UI.addFragment(manager, R.id.rlMain, alert);
+					return true;
+				}
+				AlertDialogFragment alert = new AlertDialogFragment();
+				alert.setOnRefreshCallback(HomeFragment.this);
+				alert.setTitle("Delete " + Convention.VISITS.getName());
+				alert.setMessage("Are you sure you want to delete this " + Convention.VISITS.getName() + "?");
+				alert.setPositiveButton("Yes", new View.OnClickListener() {
+					@Override
+					public void onClick(View view) {
+						Save.isDelete(db, Table.VISITS.getName(), visit.ID);
+						manager.popBackStack();
+					}
+				});
+				alert.setNegativeButton("No", new View.OnClickListener() {
+					@Override
+					public void onClick(View view) {
+						manager.popBackStack();
+					}
+				});
+				UI.addFragment(manager, R.id.rlMain, alert);
+				return true;
 			}
 		});
 		container.addView(todayVisitsItem);

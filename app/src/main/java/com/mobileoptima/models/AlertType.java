@@ -1,7 +1,6 @@
 package com.mobileoptima.models;
 
-public class MasterBreakType {
+public class AlertType {
 	public String ID;
 	public String name;
-	public int duration;
 }

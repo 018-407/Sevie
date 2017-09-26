@@ -5,6 +5,7 @@ import android.content.res.Resources;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Message;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -46,19 +47,21 @@ import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity implements OnRefreshCallback, OnInitializeCallback, OnClickListener {
 	private ArrayList<Fragment> vpFragments;
-	private ArrayList<String> vpTabTitles;
 	private ArrayList<Integer> vpTabIcons;
+	private ArrayList<String> vpTabTitles;
+	private CustomTextView tvEmployeeNameHeaderDrawerMain, tvEmployeeNumberHeaderDrawerMain;
 	private DisplayImageOptions ivEmployeePhotoHeaderDrawerMainOptions, ivCompanyLogoHeaderDrawerMainOptions;
 	private DrawerLayout dlMain;
 	private FragmentManager manager;
+	private Handler handler;
 	private ImageLoader imageLoader;
 	private ImageView ivEmployeePhotoHeaderDrawerMain, ivCompanyLogoHeaderDrawerMain;
 	private LinearLayout llMenuItemsDrawerMain;
+	private ModulesSlidingTab stMain;
 	private OnBackPressedCallback backPressedCallback;
 	private Resources res;
-	private ModulesSlidingTab stMain;
 	private SQLiteAdapter db;
-	private CustomTextView tvEmployeeNameHeaderDrawerMain, tvEmployeeNumberHeaderDrawerMain;
+	private Thread thread;
 	private ViewPager vpMain;
 	private ViewPagerAdapter vpAdapter;
 	private Window window;
@@ -82,6 +85,30 @@ public class MainActivity extends AppCompatActivity implements OnRefreshCallback
 		vpMain = findViewById(R.id.vpMain);
 		stMain = findViewById(R.id.stMain);
 		llMenuAppBarMain.setOnClickListener(this);
+		thread = new Thread(new Runnable() {
+			@Override
+			public void run() {
+				try {
+					while(!thread.isInterrupted()) {
+						if(showTimeSecurityAlertDialog) {
+							Thread.sleep(1000);
+							handler.sendMessage(handler.obtainMessage());
+						}
+					}
+				}
+				catch(InterruptedException e) {
+					e.printStackTrace();
+				}
+			}
+		});
+		handler = new Handler(new Handler.Callback() {
+			@Override
+			public boolean handleMessage(Message message) {
+				validateTime();
+				return true;
+			}
+		});
+		thread.start();
 		vpFragments = new ArrayList<>();
 		vpTabTitles = new ArrayList<>();
 		vpTabIcons = new ArrayList<>();
@@ -118,6 +145,12 @@ public class MainActivity extends AppCompatActivity implements OnRefreshCallback
 	protected void onSaveInstanceState(Bundle outState) {
 		super.onSaveInstanceState(outState);
 		isSaveInstanceState = true;
+	}
+
+	@Override
+	protected void onDestroy() {
+		super.onDestroy();
+		thread.interrupt();
 	}
 
 	@Override
@@ -191,23 +224,16 @@ public class MainActivity extends AppCompatActivity implements OnRefreshCallback
 				vpTabIcons.add(module.getIcon());
 			}
 		}
-		if(vpAdapter == null) {
-			new Handler().postDelayed(new Runnable() {
-				@Override
-				public void run() {
-					vpAdapter = new ViewPagerAdapter(manager, vpFragments, vpTabTitles, vpTabIcons);
-					vpMain.setOffscreenPageLimit(6);
-					vpMain.setAdapter(vpAdapter);
-					stMain.setViewPager(vpMain);
-					stMain.setMaxScrollItems(6);
-				}
-			}, 0);
-		}
-		else {
-			vpAdapter.notifyDataSetChanged();
-			vpMain.invalidate();
-			stMain.init();
-		}
+		new Handler().postDelayed(new Runnable() {
+			@Override
+			public void run() {
+				vpAdapter = new ViewPagerAdapter(manager, vpFragments, vpTabTitles, vpTabIcons);
+				vpMain.setOffscreenPageLimit(6);
+				vpMain.setAdapter(vpAdapter);
+				stMain.setViewPager(vpMain);
+				stMain.setMaxScrollItems(6);
+			}
+		}, 0);
 		validateTime();
 	}
 
@@ -225,6 +251,10 @@ public class MainActivity extends AppCompatActivity implements OnRefreshCallback
 		}
 		if(backPressedCallback != null) {
 			backPressedCallback.onBackPressed();
+			return;
+		}
+		if(vpMain.getCurrentItem() != 0) {
+			vpMain.setCurrentItem(0, false);
 			return;
 		}
 		if(manager.getBackStackEntryCount() == 0) {
@@ -348,13 +378,12 @@ public class MainActivity extends AppCompatActivity implements OnRefreshCallback
 		if(apiKey == null || apiKey.isEmpty()) {
 			return;
 		}
-		if(showTimeSecurityAlertDialog) {
-			showTimeSecurityAlertDialog = false;
-			manager.popBackStack();
-		}
 		long serverTimestamp = Get.serverTimestamp(db);
 		long timestamp = System.currentTimeMillis();
 		if(serverTimestamp == 0 || !(serverTimestamp >= (timestamp - Settings.TIME_SECURITY_ALLOWANCE) && serverTimestamp <= (timestamp + Settings.TIME_SECURITY_ALLOWANCE))) {
+			if(showTimeSecurityAlertDialog) {
+				return;
+			}
 			showTimeSecurityAlertDialog = true;
 			final AlertDialogFragment alert = new AlertDialogFragment();
 			alert.setOnBackPressedCallback(new OnBackPressedCallback() {
@@ -384,6 +413,11 @@ public class MainActivity extends AppCompatActivity implements OnRefreshCallback
 				}
 			});
 			UI.addFragment(manager, R.id.rlMain, alert);
+			return;
+		}
+		if(showTimeSecurityAlertDialog) {
+			showTimeSecurityAlertDialog = false;
+			manager.popBackStack();
 		}
 	}
 }

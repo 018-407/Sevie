@@ -85,8 +85,9 @@ public class LoadingDialogFragment extends Fragment implements OnBackPressedCall
 							handler.sendMessage(handler.obtainMessage());
 							break;
 						case UPDATE_MASTER_FILE:
-							max = 9;
+							max = 10;
 							String syncBatchID = Get.syncBatchID(db);
+							result = true;
 							if(syncBatchID == null || syncBatchID.isEmpty()) {
 								result = Rx.syncBatchID(db, LoadingDialogFragment.this);
 							}
@@ -132,8 +133,22 @@ public class LoadingDialogFragment extends Fragment implements OnBackPressedCall
 								Thread.sleep(250);
 								handler.sendMessage(handler.obtainMessage());
 							}
+							if(result) {
+								result = Rx.stores(db, LoadingDialogFragment.this);
+								Thread.sleep(250);
+								handler.sendMessage(handler.obtainMessage());
+							}
+							if(result) {
+								result = Rx.visits(db, LoadingDialogFragment.this);
+								Thread.sleep(250);
+								handler.sendMessage(handler.obtainMessage());
+							}
 							break;
 						case SEND_BACK_UP:
+							max = 1;
+							result = true;
+							Thread.sleep(250);
+							handler.sendMessage(handler.obtainMessage());
 							break;
 						case SYNC_DATA:
 							break;

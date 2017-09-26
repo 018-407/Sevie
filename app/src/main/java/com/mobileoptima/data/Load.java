@@ -2,7 +2,8 @@ package com.mobileoptima.data;
 
 import com.android.library.Sqlite.SQLiteAdapter;
 import com.mobileoptima.constants.Table;
-import com.mobileoptima.models.MasterEmployee;
+import com.mobileoptima.models.Employee;
+import com.mobileoptima.models.Store;
 import com.mobileoptima.models.Visit;
 
 import net.sqlcipher.Cursor;
@@ -10,12 +11,12 @@ import net.sqlcipher.Cursor;
 import java.util.ArrayList;
 
 public class Load {
-	public static ArrayList<MasterEmployee> employees(SQLiteAdapter db) {
-		ArrayList<MasterEmployee> employees = new ArrayList<>();
-		MasterEmployee employee;
+	public static ArrayList<Employee> employees(SQLiteAdapter db) {
+		ArrayList<Employee> employees = new ArrayList<>();
+		Employee employee;
 		Cursor cursor = db.rawQuery("SELECT ID, firstName, lastName, employeeNumber, email, mobile, photoURL, teamID, isApprover FROM " + Table.EMPLOYEES.getName() + " WHERE isActive = 1");
 		while(cursor.moveToNext()) {
-			employee = new MasterEmployee();
+			employee = new Employee();
 			employee.ID = cursor.getString(0);
 			employee.firstName = cursor.getString(1);
 			employee.lastName = cursor.getString(2);
@@ -31,28 +32,56 @@ public class Load {
 		return employees;
 	}
 
-	public static ArrayList<Visit> visits(SQLiteAdapter db) {
+	public static ArrayList<Store> stores(SQLiteAdapter db) {
+		ArrayList<Store> stores = new ArrayList<>();
+		Store store;
+		Cursor cursor = db.rawQuery("SELECT name, address, contactNumber, class1ID, class2ID, class3ID, gpsLongitude, gpsLatitude, geoFenceRadius, ID, syncBatchID, webID, employeeID FROM " + Table.STORES.getName() + " WHERE isDelete = 0");
+		while(cursor.moveToNext()) {
+			store = new Store();
+			store.name = cursor.getString(0);
+			store.address = cursor.getString(1);
+			store.contactNumber = cursor.getString(2);
+			store.class1ID = cursor.getString(3);
+			store.class2ID = cursor.getString(4);
+			store.class3ID = cursor.getString(5);
+			store.gpsLongitude = cursor.getDouble(6);
+			store.gpsLatitude = cursor.getDouble(7);
+			store.geoFenceRadius = cursor.getInt(8);
+			store.ID = cursor.getString(9);
+			store.syncBatchID = cursor.getString(10);
+			store.webID = cursor.getString(11);
+			store.employee = Get.employee(db, cursor.getString(12));
+		}
+		cursor.close();
+		return stores;
+	}
+
+	public static ArrayList<Visit> visits(SQLiteAdapter db, String dateStart, String dateEnd) {
 		ArrayList<Visit> visits = new ArrayList<>();
 		Visit visit;
-		Cursor cursor = db.rawQuery("");
+		Cursor cursor = db.rawQuery("SELECT name, dateStart, dateEnd, deliveryFee, mappingCode, notes, status, storeID, checkInID, checkOutID, ID, dDate, dTime, syncBatchID, webID, employeeID, isFromWeb FROM " + Table.VISITS.getName() + " WHERE dateStart >= '" + dateStart + "' AND dateEnd <= '" + dateEnd + "' AND isDelete = 0");
 		while(cursor.moveToNext()) {
 			visit = new Visit();
-			visit.ID = cursor.getString(0);
-			visit.name = cursor.getString(1);
-			visit.store = Get.store(db, cursor.getString(2));
+			visit.name = cursor.getString(0);
+			visit.dateStart = cursor.getString(1);
+			visit.dateEnd = cursor.getString(2);
+			visit.deliveryFee = cursor.getString(3);
+			visit.mappingCode = cursor.getString(4);
+			visit.notes = cursor.getString(5);
+			visit.status = cursor.getString(6);
+			visit.store = Get.store(db, cursor.getString(7));
+			visit.checkIn = Get.checkIn(db, cursor.getString(8));
+			visit.checkOut = Get.checkOut(db, cursor.getString(9));
+			visit.ID = cursor.getString(10);
+			visit.dDate = cursor.getString(11);
+			visit.dTime = cursor.getString(12);
+			visit.syncBatchID = cursor.getString(13);
+			visit.webID = cursor.getString(14);
+			visit.employee = Get.employee(db, cursor.getString(15));
+			visit.isFromWeb = cursor.getInt(16) == 1;
 			visits.add(visit);
 		}
 		cursor.close();
-		visit = new Visit();
-		visit.ID = "1";
-		visit.name = "Task 1";
-		visit.store = Get.store(db, "1");
-		visits.add(visit);
-		visit = new Visit();
-		visit.ID = "2";
-		visit.name = "Task 2";
-		visit.store = Get.store(db, "2");
-		visits.add(visit);
 		return visits;
 	}
 }

@@ -1,6 +1,6 @@
 package com.mobileoptima.models;
 
-public class MasterEmployee {
+public class Employee {
 	public String ID;
 	public String firstName;
 	public String lastName;

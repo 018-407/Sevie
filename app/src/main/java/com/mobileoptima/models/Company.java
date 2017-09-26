@@ -1,6 +1,6 @@
 package com.mobileoptima.models;
 
-public class MasterCompany {
+public class Company {
 	public String ID;
 	public String name;
 	public String code;

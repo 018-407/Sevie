@@ -64,6 +64,51 @@ public enum Table {
 	),
 	OVERTIME_REASONS("overtime_reasons_tb", ", name TEXT" +
 			", isActive INTEGER DEFAULT 1"
+	),
+	STORES("stores_tb", ", name TEXT" +
+			", address TEXT" +
+			", contactNumber TEXT" +
+			", class1ID TEXT" +
+			", class2ID TEXT" +
+			", class3ID TEXT" +
+			", gpsLongitude TEXT" +
+			", gpsLatitude TEXT" +
+			", geoFenceRadius TEXT" +
+			", isTag INTEGER DEFAULT 0" +
+			", isFromVisit INTEGER DEFAULT 0" +
+			", dDate TEXT" +
+			", dTime TEXT" +
+			", syncBatchID TEXT" +
+			", webID INTEGER" +
+			", employeeID INTEGER" +
+			", isFromWeb INTEGER DEFAULT 0" +
+			", isSync INTEGER DEFAULT 1" +
+			", isUpdate INTEGER DEFAULT 1" +
+			", isWebUpdate INTEGER DEFAULT 1" +
+			", isDelete INTEGER DEFAULT 0" +
+			", isWebDelete INTEGER DEFAULT 0"
+	),
+	VISITS("visits_tb", ", name TEXT" +
+			", dateStart TEXT" +
+			", dateEnd TEXT" +
+			", deliveryFee TEXT" +
+			", mappingCode TEXT" +
+			", notes TEXT" +
+			", status TEXT" +
+			", storeID INTEGER" +
+			", checkInID INTEGER" +
+			", checkOutID INTEGER" +
+			", dDate TEXT" +
+			", dTime TEXT" +
+			", syncBatchID TEXT" +
+			", webID INTEGER" +
+			", employeeID INTEGER" +
+			", isFromWeb INTEGER DEFAULT 0" +
+			", isSync INTEGER DEFAULT 1" +
+			", isUpdate INTEGER DEFAULT 1" +
+			", isWebUpdate INTEGER DEFAULT 1" +
+			", isDelete INTEGER DEFAULT 0" +
+			", isWebDelete INTEGER DEFAULT 0"
 	);
 	final String name, fields;
 

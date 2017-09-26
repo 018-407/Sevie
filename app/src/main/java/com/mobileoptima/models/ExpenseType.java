@@ -1,8 +1,8 @@
 package com.mobileoptima.models;
 
-public class MasterExpenseType {
+public class ExpenseType {
 	public String ID;
 	public String name;
-	public MasterExpenseTypeCategory expenseTypeCategory;
+	public ExpenseTypeCategory expenseTypeCategory;
 	public boolean isRequired;
 }
