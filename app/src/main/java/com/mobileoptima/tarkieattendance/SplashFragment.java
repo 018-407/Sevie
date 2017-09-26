@@ -34,7 +34,7 @@ public class SplashFragment extends Fragment implements OnBackPressedCallback, O
 	private SQLiteAdapter db;
 	private Thread thread;
 	private Window window;
-	private boolean isSaveInstanceState, isInitialized, isPermissionDenied, showPermissionAlertDialog;
+	private boolean isSaveInstanceState, isInitialized, isPermissionDenied, showAlertDialog;
 
 	@Override
 	public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -115,10 +115,10 @@ public class SplashFragment extends Fragment implements OnBackPressedCallback, O
 		}
 		if(Settings.EXTERNAL_STORAGE && ActivityCompat.checkSelfPermission(main, android.Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
 			if(isPermissionDenied) {
-				if(showPermissionAlertDialog) {
+				if(showAlertDialog) {
 					return;
 				}
-				showPermissionAlertDialog = true;
+				showAlertDialog = true;
 				AlertDialogFragment alert = new AlertDialogFragment();
 				alert.setOnBackPressedCallback(new OnBackPressedCallback() {
 					@Override
@@ -150,8 +150,8 @@ public class SplashFragment extends Fragment implements OnBackPressedCallback, O
 			requestPermissions(new String[] {android.Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1);
 			return;
 		}
-		if(showPermissionAlertDialog) {
-			showPermissionAlertDialog = false;
+		if(showAlertDialog) {
+			showAlertDialog = false;
 			manager.popBackStack();
 			return;
 		}

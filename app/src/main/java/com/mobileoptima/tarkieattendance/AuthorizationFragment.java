@@ -35,7 +35,7 @@ public class AuthorizationFragment extends Fragment implements OnBackPressedCall
 	private OnRefreshCallback refreshCallback;
 	private SQLiteAdapter db;
 	private Window window;
-	private boolean isSaveInstanceState, isPermissionDenied, showPermissionAlertDialog;
+	private boolean isSaveInstanceState, isPermissionDenied, showAlertDialog;
 
 	@Override
 	public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -98,10 +98,10 @@ public class AuthorizationFragment extends Fragment implements OnBackPressedCall
 		}
 		if(ActivityCompat.checkSelfPermission(main, android.Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED) {
 			if(isPermissionDenied) {
-				if(showPermissionAlertDialog) {
+				if(showAlertDialog) {
 					return;
 				}
-				showPermissionAlertDialog = true;
+				showAlertDialog = true;
 				AlertDialogFragment alert = new AlertDialogFragment();
 				alert.setOnBackPressedCallback(new OnBackPressedCallback() {
 					@Override
@@ -133,8 +133,8 @@ public class AuthorizationFragment extends Fragment implements OnBackPressedCall
 			requestPermissions(new String[] {android.Manifest.permission.READ_PHONE_STATE}, 2);
 			return;
 		}
-		if(showPermissionAlertDialog) {
-			showPermissionAlertDialog = false;
+		if(showAlertDialog) {
+			showAlertDialog = false;
 			manager.popBackStack();
 		}
 	}

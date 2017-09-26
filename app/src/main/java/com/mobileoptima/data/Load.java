@@ -3,6 +3,7 @@ package com.mobileoptima.data;
 import com.android.library.Sqlite.SQLiteAdapter;
 import com.mobileoptima.constants.Table;
 import com.mobileoptima.models.Employee;
+import com.mobileoptima.models.Expense;
 import com.mobileoptima.models.Store;
 import com.mobileoptima.models.Visit;
 
@@ -50,7 +51,7 @@ public class Load {
 			store.ID = cursor.getString(9);
 			store.syncBatchID = cursor.getString(10);
 			store.webID = cursor.getString(11);
-			store.employee = Get.employee(db, cursor.getString(12));
+			store.employee.ID = cursor.getString(12);
 		}
 		cursor.close();
 		return stores;
@@ -69,19 +70,48 @@ public class Load {
 			visit.mappingCode = cursor.getString(4);
 			visit.notes = cursor.getString(5);
 			visit.status = cursor.getString(6);
-			visit.store = Get.store(db, cursor.getString(7));
-			visit.checkIn = Get.checkIn(db, cursor.getString(8));
-			visit.checkOut = Get.checkOut(db, cursor.getString(9));
+			visit.store.ID = cursor.getString(7);
+			visit.checkIn.ID = cursor.getString(8);
+			visit.checkOut.ID = cursor.getString(9);
 			visit.ID = cursor.getString(10);
 			visit.dDate = cursor.getString(11);
 			visit.dTime = cursor.getString(12);
 			visit.syncBatchID = cursor.getString(13);
 			visit.webID = cursor.getString(14);
-			visit.employee = Get.employee(db, cursor.getString(15));
+			visit.employee.ID = cursor.getString(15);
 			visit.isFromWeb = cursor.getInt(16) == 1;
 			visits.add(visit);
 		}
 		cursor.close();
 		return visits;
+	}
+
+	public static ArrayList<Expense> expenses(SQLiteAdapter db, String date) {
+		ArrayList<Expense> expenses = new ArrayList<>();
+		Expense expense;
+		Cursor cursor = db.rawQuery("SELECT name, origin, destination, notes, storeID, timeInID, expenseTypeID, amount, isReimbursable, isSubmit, ID, dDate, dTime, syncBatchID, webID, employeeID, gpsID FROM " + Table.EXPENSE.getName() + " WHERE isDelete = 0");
+		while(cursor.moveToNext()) {
+			expense = new Expense();
+			expense.name = cursor.getString(0);
+			expense.origin = cursor.getString(1);
+			expense.destination = cursor.getString(2);
+			expense.notes = cursor.getString(3);
+			expense.store.ID = cursor.getString(4);
+			expense.timeIn.ID = cursor.getString(5);
+			expense.expenseType.ID = cursor.getString(6);
+			expense.amount = cursor.getFloat(7);
+			expense.isReimbursable = cursor.getInt(8) == 1;
+			expense.isSubmit = cursor.getInt(9) == 1;
+			expense.ID = cursor.getString(10);
+			expense.dDate = cursor.getString(11);
+			expense.dTime = cursor.getString(12);
+			expense.syncBatchID = cursor.getString(13);
+			expense.webID = cursor.getString(14);
+			expense.employee.ID = cursor.getString(15);
+			expense.gps.ID = cursor.getString(16);
+			expenses.add(expense);
+		}
+		cursor.close();
+		return expenses;
 	}
 }

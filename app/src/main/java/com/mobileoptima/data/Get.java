@@ -11,6 +11,8 @@ import com.mobileoptima.models.CheckOut;
 import com.mobileoptima.models.Company;
 import com.mobileoptima.models.Employee;
 import com.mobileoptima.models.Store;
+import com.mobileoptima.models.TimeIn;
+import com.mobileoptima.models.TimeOut;
 
 import net.sqlcipher.Cursor;
 
@@ -97,6 +99,10 @@ public class Get {
 		return db.getString("SELECT photoURL FROM " + Table.EMPLOYEES.getName() + " WHERE ID = '" + employeeID + "'");
 	}
 
+	public static int expensesTodayCount(SQLiteAdapter db) {
+		return db.getInt("SELECT COUNT(ID) FROM " + Table.EXPENSE.getName() + " WHERE timeInID = '" + timeInID(db) + "'");
+	}
+
 	public static boolean isModuleEnabled(SQLiteAdapter db, String moduleID) {
 		return db.getInt("SELECT isEnabled FROM " + Table.MODULES.getName() + " WHERE name = '" + moduleID + "'") == 1;
 	}
@@ -150,10 +156,20 @@ public class Get {
 		return db.getString("SELECT syncBatchID FROM " + Table.SYNC_BATCH.getName() + " WHERE ID = 1");
 	}
 
+	public static TimeIn timeIn(SQLiteAdapter db, String timeInID) {
+		TimeIn timeIn = new TimeIn();
+		return timeIn;
+	}
+
 	public static String timeInID(SQLiteAdapter db) {
 //		return db.getString("SELECT ID FROM " + Table.ACCESS.getName() + " WHERE ID = '0'");
 		return null;
 		//TODO
+	}
+
+	public static TimeOut timeOut(SQLiteAdapter db, String timeOutID) {
+		TimeOut timeOut = new TimeOut();
+		return timeOut;
 	}
 
 	public static String timeOutID(SQLiteAdapter db, String timeInID) {
@@ -162,8 +178,7 @@ public class Get {
 		//TODO
 	}
 
-	public static int visitTodayCount(SQLiteAdapter db) {
-		String date = Time.getDateFromTimestamp(Time.getDeviceTimestamp());
-		return db.getInt("SELECT COUNT(ID) FROM " + Table.VISITS.getName() + " WHERE dateStart >= '" + date + "' AND dateEnd <= '" + date + "' AND isFromWeb = 0");
+	public static int visitsTodayCount(SQLiteAdapter db) {
+		return db.getInt("SELECT COUNT(ID) FROM " + Table.VISITS.getName() + " WHERE timeInID = '" + timeInID(db) + "' AND isFromWeb = 0");
 	}
 }

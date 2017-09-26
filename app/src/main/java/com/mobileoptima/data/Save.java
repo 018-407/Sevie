@@ -12,6 +12,8 @@ import com.mobileoptima.models.AlertType;
 import com.mobileoptima.models.BreakType;
 import com.mobileoptima.models.Company;
 import com.mobileoptima.models.Employee;
+import com.mobileoptima.models.Expense;
+import com.mobileoptima.models.ExpenseReport;
 import com.mobileoptima.models.ExpenseType;
 import com.mobileoptima.models.ExpenseTypeCategory;
 import com.mobileoptima.models.OvertimeReason;
@@ -116,6 +118,42 @@ public class Save {
 		ArrayList<Condition> conditions = new ArrayList<>();
 		conditions.add(new Condition(new FieldValue("ID", employee.ID)));
 		return db.update(table, fieldValues, conditions);
+	}
+
+	public static boolean expense(SQLiteAdapter db, Expense expense) {
+		String table = Table.EXPENSE.getName();
+		ArrayList<FieldValue> fieldValues = new ArrayList<>();
+		fieldValues.add(new FieldValue("name", expense.name));
+		fieldValues.add(new FieldValue("origin", expense.origin));
+		fieldValues.add(new FieldValue("destination", expense.destination));
+		fieldValues.add(new FieldValue("notes", expense.notes));
+		fieldValues.add(new FieldValue("storeID", expense.store.ID));
+		fieldValues.add(new FieldValue("timeInID", expense.timeIn.ID));
+		fieldValues.add(new FieldValue("expenseTypeID", expense.expenseType.ID));
+		fieldValues.add(new FieldValue("amount", expense.amount));
+		fieldValues.add(new FieldValue("isReimbursable", expense.isReimbursable));
+		fieldValues.add(new FieldValue("isSubmit", expense.isSubmit));
+		fieldValues.add(new FieldValue("syncBatchID", expense.syncBatchID));
+		fieldValues.add(new FieldValue("webID", expense.webID));
+		fieldValues.add(new FieldValue("employeeID", expense.employee.ID));
+		fieldValues.add(new FieldValue("gpsID", expense.gps.ID));
+		fieldValues.add(new FieldValue("isSync", expense.isSync));
+		fieldValues.add(new FieldValue("isUpdate", expense.isUpdate));
+		fieldValues.add(new FieldValue("isWebUpdate", expense.isWebUpdate));
+		fieldValues.add(new FieldValue("isDelete", expense.isDelete));
+		fieldValues.add(new FieldValue("isWebDelete", expense.isWebDelete));
+		if(db.getCount("SELECT ID FROM " + table + " WHERE ID = '" + expense.ID + "'") == 0) {
+			fieldValues.add(new FieldValue("dDate", expense.dDate));
+			fieldValues.add(new FieldValue("dTime", expense.dTime));
+			return db.insert(table, fieldValues) > 0;
+		}
+		ArrayList<Condition> conditions = new ArrayList<>();
+		conditions.add(new Condition(new FieldValue("ID", expense.ID)));
+		return db.update(table, fieldValues, conditions);
+	}
+
+	public static boolean expenseReport(SQLiteAdapter db, ExpenseReport expenseReport) {
+		return false;
 	}
 
 	public static boolean expenseType(SQLiteAdapter db, ExpenseType expenseType) {
@@ -291,6 +329,8 @@ public class Save {
 		fieldValues.add(new FieldValue("notes", visit.notes));
 		fieldValues.add(new FieldValue("status", visit.status));
 		fieldValues.add(new FieldValue("storeID", visit.store.ID));
+		fieldValues.add(new FieldValue("checkInID", visit.checkIn.ID));
+		fieldValues.add(new FieldValue("checkOutID", visit.checkOut.ID));
 		fieldValues.add(new FieldValue("syncBatchID", visit.syncBatchID));
 		fieldValues.add(new FieldValue("webID", visit.webID));
 		fieldValues.add(new FieldValue("employeeID", visit.employee.ID));

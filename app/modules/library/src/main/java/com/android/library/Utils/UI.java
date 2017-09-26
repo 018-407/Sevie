@@ -8,10 +8,19 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.AppCompatActivity;
+import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.RelativeLayout;
+import android.widget.Toast;
+
+import com.android.library.R;
+import com.android.library.widgets.CustomTextView;
 
 public class UI {
 	public static void addFragment(FragmentManager manager, int containerViewID, Fragment fragment) {
@@ -88,5 +97,16 @@ public class UI {
 			drawer.openDrawer(GravityCompat.START);
 		}
 		return isDrawerClosed;
+	}
+
+	public static void showToast(AppCompatActivity activity, ViewGroup container, String message) {
+		View view = LayoutInflater.from(activity).inflate(R.layout.alert_toast_layout, container, false);
+		CustomTextView text = view.findViewById(R.id.tvMessageAlertToast);
+		text.setText(message);
+		Toast toast = new Toast(activity);
+		toast.setGravity(Gravity.BOTTOM, 0, activity.getResources().getDimensionPixelSize(R.dimen.one_hundred));
+		toast.setDuration(Toast.LENGTH_SHORT);
+		toast.setView(view);
+		toast.show();
 	}
 }

@@ -96,6 +96,7 @@ public enum Table {
 			", notes TEXT" +
 			", status TEXT" +
 			", storeID INTEGER" +
+			", timeInID INTEGER" +
 			", checkInID INTEGER" +
 			", checkOutID INTEGER" +
 			", dDate TEXT" +
@@ -104,6 +105,28 @@ public enum Table {
 			", webID INTEGER" +
 			", employeeID INTEGER" +
 			", isFromWeb INTEGER DEFAULT 0" +
+			", isSync INTEGER DEFAULT 1" +
+			", isUpdate INTEGER DEFAULT 1" +
+			", isWebUpdate INTEGER DEFAULT 1" +
+			", isDelete INTEGER DEFAULT 0" +
+			", isWebDelete INTEGER DEFAULT 0"
+	),
+	EXPENSE("expense_tb", ", name TEXT" +
+			", origin TEXT" +
+			", destination TEXT" +
+			", notes TEXT" +
+			", storeID INTEGER" +
+			", timeInID INTEGER" +
+			", expenseTypeID INTEGER" +
+			", amount TEXT" +
+			", isReimbursable INTEGER DEFAULT 1" +
+			", isSubmit INTEGER DEFAULT 0" +
+			", dDate TEXT" +
+			", dTime TEXT" +
+			", syncBatchID TEXT" +
+			", webID INTEGER" +
+			", employeeID INTEGER" +
+			", gpsID INTEGER" +
 			", isSync INTEGER DEFAULT 1" +
 			", isUpdate INTEGER DEFAULT 1" +
 			", isWebUpdate INTEGER DEFAULT 1" +

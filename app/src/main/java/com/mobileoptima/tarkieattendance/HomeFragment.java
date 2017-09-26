@@ -30,6 +30,7 @@ import com.mobileoptima.data.Get;
 import com.mobileoptima.data.Load;
 import com.mobileoptima.data.Save;
 import com.mobileoptima.interfaces.Callback.OnRefreshCallback;
+import com.mobileoptima.models.Expense;
 import com.mobileoptima.models.Store;
 import com.mobileoptima.models.Visit;
 import com.mobileoptima.tarkieattendance.visits.VisitDetailsFragment;
@@ -48,6 +49,7 @@ public class HomeFragment extends Fragment implements OnRefreshCallback, OnClick
 	private RelativeLayout rlAttendanceHome;
 	private ScrollView svContentHome;
 	private SQLiteAdapter db;
+	private String conventionStores, conventionVisits;
 	private Thread thread;
 	private View menuTimeInOut;
 
@@ -133,6 +135,8 @@ public class HomeFragment extends Fragment implements OnRefreshCallback, OnClick
 	@Override
 	public void onRefresh() {
 		main.setOnBackPressedCallback(null);
+		conventionStores = Convention.STORES.getName();
+		conventionVisits = Convention.VISITS.getName();
 		if(true || (!Modules.VISITS.isEnabled() && !Modules.INVENTORY.isEnabled() && !Modules.FORMS.isEnabled())) {
 			rlAttendanceHome.setVisibility(View.VISIBLE);
 			btnTimeInOutHome.setVisibility(View.VISIBLE);
@@ -156,7 +160,7 @@ public class HomeFragment extends Fragment implements OnRefreshCallback, OnClick
 				btnStoreHome.setTextColor(ContextCompat.getColor(main, R.color.text_pri));
 			}
 			else {
-				btnStoreHome.setText("Select " + Convention.STORES.getName());
+				btnStoreHome.setText("Select " + conventionStores);
 				btnStoreHome.setTextColor(ContextCompat.getColor(main, R.color.text_sec));
 			}
 			menuTimeInOut = llMenuItemsDrawerMain.getChildAt(1);
@@ -169,7 +173,7 @@ public class HomeFragment extends Fragment implements OnRefreshCallback, OnClick
 			for(Visit visit : Load.visits(db, today, today)) {
 				updateTodayVisits(llTodayVisitsHome, visit);
 			}
-			btnNewVisitsHome.setText("New " + Convention.VISITS.getName());
+			btnNewVisitsHome.setText("New " + conventionVisits);
 		}
 		if(Modules.FORMS.isEnabled()) {
 			llFormsHome.setVisibility(View.VISIBLE);
@@ -193,8 +197,8 @@ public class HomeFragment extends Fragment implements OnRefreshCallback, OnClick
 			case R.id.btnNewVisitsHome:
 				AlertDialogFragment alert = new AlertDialogFragment();
 				alert.setOnRefreshCallback(this);
-				alert.setTitle("Add " + Convention.VISITS.getName());
-				alert.setMessage("Are you sure you want to add new " + Convention.VISITS.getName() + "?");
+				alert.setTitle("Add " + conventionVisits);
+				alert.setMessage("Are you sure you want to add new " + conventionVisits + "?");
 				alert.setPositiveButton("Yes", new View.OnClickListener() {
 					@Override
 					public void onClick(View view) {
@@ -202,14 +206,15 @@ public class HomeFragment extends Fragment implements OnRefreshCallback, OnClick
 						String date = Time.getDateFromTimestamp(timestamp);
 						String time = Time.getTimeFromTimestamp(timestamp);
 						Visit visit = new Visit();
-						visit.name = "New Visit " + (Get.visitTodayCount(db) + 1);
+						visit.name = "New Visit " + (Get.visitsTodayCount(db) + 1);
 						visit.dateStart = date;
 						visit.dateEnd = date;
 						visit.dDate = date;
 						visit.dTime = time;
 						visit.employee = Get.employee(db, Get.employeeID(db));
-						Save.visit(db, visit);
-						manager.popBackStack();
+						if(Save.visit(db, visit)) {
+							manager.popBackStack();
+						}
 					}
 				});
 				alert.setNegativeButton("No", new View.OnClickListener() {
@@ -221,6 +226,15 @@ public class HomeFragment extends Fragment implements OnRefreshCallback, OnClick
 				UI.addFragment(manager, R.id.rlMain, alert);
 				break;
 			case R.id.btnAddExpenseHome:
+				String timestamp = Time.getDeviceTimestamp();
+				Expense expense = new Expense();
+				expense.name = "Expense " + (Get.expensesTodayCount(db) + 1);
+				expense.dDate = Time.getDateFromTimestamp(timestamp);
+				expense.dTime = Time.getTimeFromTimestamp(timestamp);
+				expense.employee = Get.employee(db, Get.employeeID(db));
+				if(Save.expense(db, expense)) {
+					UI.showToast(main, (RelativeLayout) main.findViewById(R.id.rlMain), "Expense " + Get.expensesTodayCount(db)+ " has been added. You may enter more details later.");
+				}
 				break;
 		}
 	}
@@ -250,8 +264,8 @@ public class HomeFragment extends Fragment implements OnRefreshCallback, OnClick
 				if(visit.isFromWeb || visit.checkIn.ID != null) {
 					AlertDialogFragment alert = new AlertDialogFragment();
 					alert.setOnRefreshCallback(HomeFragment.this);
-					alert.setTitle("Delete " + Convention.VISITS.getName());
-					alert.setMessage("You are not allowed to delete this " + Convention.VISITS.getName() + ".");
+					alert.setTitle("Delete " + conventionVisits);
+					alert.setMessage("You are not allowed to delete this " + conventionVisits + ".");
 					alert.setPositiveButton("OK", new View.OnClickListener() {
 						@Override
 						public void onClick(View view) {
@@ -263,8 +277,8 @@ public class HomeFragment extends Fragment implements OnRefreshCallback, OnClick
 				}
 				AlertDialogFragment alert = new AlertDialogFragment();
 				alert.setOnRefreshCallback(HomeFragment.this);
-				alert.setTitle("Delete " + Convention.VISITS.getName());
-				alert.setMessage("Are you sure you want to delete this " + Convention.VISITS.getName() + "?");
+				alert.setTitle("Delete " + conventionVisits);
+				alert.setMessage("Are you sure you want to delete this " + conventionVisits + "?");
 				alert.setPositiveButton("Yes", new View.OnClickListener() {
 					@Override
 					public void onClick(View view) {

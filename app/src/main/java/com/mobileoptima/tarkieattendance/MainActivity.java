@@ -61,11 +61,12 @@ public class MainActivity extends AppCompatActivity implements OnRefreshCallback
 	private OnBackPressedCallback backPressedCallback;
 	private Resources res;
 	private SQLiteAdapter db;
+	private String conventionTimeIn, conventionTimeOut;
 	private Thread thread;
 	private ViewPager vpMain;
 	private ViewPagerAdapter vpAdapter;
 	private Window window;
-	private boolean isSaveInstanceState, isRefresh, showTimeSecurityAlertDialog;
+	private boolean isSaveInstanceState, isRefresh, showValidateTimeAlertDialog, showUpdateMasterFileAlertDialog;
 
 	@Override
 	protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -90,7 +91,7 @@ public class MainActivity extends AppCompatActivity implements OnRefreshCallback
 			public void run() {
 				try {
 					while(!thread.isInterrupted()) {
-						if(showTimeSecurityAlertDialog) {
+						if(showValidateTimeAlertDialog) {
 							Thread.sleep(1000);
 							handler.sendMessage(handler.obtainMessage());
 						}
@@ -197,14 +198,16 @@ public class MainActivity extends AppCompatActivity implements OnRefreshCallback
 				}
 			}
 		}
+		conventionTimeIn = Convention.TIME_IN.getName();
+		conventionTimeOut = Convention.TIME_OUT.getName();
 		String timeInID = Get.timeInID(db);
 		if(timeInID != null && !timeInID.isEmpty()) {
 			Menu.TIME_IN_OUT.setIcon(R.drawable.ic_menu_time_out);
-			Menu.TIME_IN_OUT.setName(Convention.TIME_OUT.getName());
+			Menu.TIME_IN_OUT.setName(conventionTimeOut);
 		}
 		else {
 			Menu.TIME_IN_OUT.setIcon(R.drawable.ic_menu_time_in);
-			Menu.TIME_IN_OUT.setName(Convention.TIME_IN.getName());
+			Menu.TIME_IN_OUT.setName(conventionTimeIn);
 		}
 		for(Menu menu : Menu.values()) {
 			updateMenuItems(llMenuItemsDrawerMain, menu);
@@ -244,6 +247,7 @@ public class MainActivity extends AppCompatActivity implements OnRefreshCallback
 			}
 		}, 0);
 		validateTime();
+		updateMasterFile();
 	}
 
 	@Override
@@ -281,7 +285,7 @@ public class MainActivity extends AppCompatActivity implements OnRefreshCallback
 				UI.openDrawer(dlMain);
 				break;
 			case 1://TIME_IN_OUT
-				if(Menu.TIME_IN_OUT.getName().equals(Convention.TIME_IN.getName())) {
+				if(Menu.TIME_IN_OUT.getName().equals(conventionTimeIn)) {
 					//TIME IN
 				}
 				else {
@@ -390,10 +394,10 @@ public class MainActivity extends AppCompatActivity implements OnRefreshCallback
 		long serverTimestamp = Get.serverTimestamp(db);
 		long timestamp = System.currentTimeMillis();
 		if(serverTimestamp == 0 || !(serverTimestamp >= (timestamp - Settings.TIME_SECURITY_ALLOWANCE) && serverTimestamp <= (timestamp + Settings.TIME_SECURITY_ALLOWANCE))) {
-			if(showTimeSecurityAlertDialog) {
+			if(showValidateTimeAlertDialog) {
 				return;
 			}
-			showTimeSecurityAlertDialog = true;
+			showValidateTimeAlertDialog = true;
 			final AlertDialogFragment alert = new AlertDialogFragment();
 			alert.setOnBackPressedCallback(new OnBackPressedCallback() {
 				@Override
@@ -407,10 +411,10 @@ public class MainActivity extends AppCompatActivity implements OnRefreshCallback
 				@Override
 				public void onClick(View view) {
 					manager.popBackStack();
-					LoadingDialogFragment updateMasterFile = new LoadingDialogFragment();
-					updateMasterFile.setOnRefreshCallback(MainActivity.this);
-					updateMasterFile.setAction(Action.VALIDATE_TIME);
-					UI.addFragment(manager, R.id.rlMain, updateMasterFile);
+					LoadingDialogFragment validateTime = new LoadingDialogFragment();
+					validateTime.setOnRefreshCallback(MainActivity.this);
+					validateTime.setAction(Action.VALIDATE_TIME);
+					UI.addFragment(manager, R.id.rlMain, validateTime);
 				}
 			});
 			alert.setNegativeButton("Settings", new View.OnClickListener() {
@@ -424,8 +428,54 @@ public class MainActivity extends AppCompatActivity implements OnRefreshCallback
 			UI.addFragment(manager, R.id.rlMain, alert);
 			return;
 		}
-		if(showTimeSecurityAlertDialog) {
-			showTimeSecurityAlertDialog = false;
+		if(showValidateTimeAlertDialog) {
+			showValidateTimeAlertDialog = false;
+			manager.popBackStack();
+		}
+	}
+
+	public void updateMasterFile() {
+		if(db == null) {
+			return;
+		}
+		String apiKey = Get.apiKey(db);
+		if(apiKey == null || apiKey.isEmpty()) {
+			return;
+		}
+		String employeeID = Get.employeeID(db);
+		if(employeeID == null || employeeID.isEmpty()) {
+			return;
+		}
+		String syncBatchID = Get.syncBatchID(db);
+		if(syncBatchID == null || syncBatchID.isEmpty()) {
+			if(showUpdateMasterFileAlertDialog) {
+				return;
+			}
+			showUpdateMasterFileAlertDialog = true;
+			final AlertDialogFragment alert = new AlertDialogFragment();
+			alert.setOnBackPressedCallback(new OnBackPressedCallback() {
+				@Override
+				public void onBackPressed() {
+					moveTaskToBack(true);
+				}
+			});
+			alert.setTitle("Update Master File");
+			alert.setMessage("Update Master File Required.");
+			alert.setPositiveButton("Update", new View.OnClickListener() {
+				@Override
+				public void onClick(View view) {
+					manager.popBackStack();
+					LoadingDialogFragment updateMasterFile = new LoadingDialogFragment();
+					updateMasterFile.setOnRefreshCallback(MainActivity.this);
+					updateMasterFile.setAction(Action.UPDATE_MASTER_FILE);
+					UI.addFragment(manager, R.id.rlMain, updateMasterFile);
+				}
+			});
+			UI.addFragment(manager, R.id.rlMain, alert);
+			return;
+		}
+		if(showUpdateMasterFileAlertDialog) {
+			showUpdateMasterFileAlertDialog = false;
 			manager.popBackStack();
 		}
 	}
